@@ -5,6 +5,8 @@ import morgan from 'morgan'
 
 import connectDB from './config/db.js'
 
+import userRoutes from './routes/userRoutes.js'
+
 import { notFound, errorHandler } from './middlewares/errorMiddleware.js'
 
 dotenv.config()
@@ -16,6 +18,10 @@ const app = express()
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
+
+app.use(express.json())
+
+app.use('/api/users', userRoutes)
 
 app.get('/', (req, res) => {
   res.send('Hello World')
