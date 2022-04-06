@@ -25,7 +25,7 @@ const createPost = asyncHandler(async (req, res) => {
 
 // @desc   Fetch all posts
 // @route  GET /api/posts/allPosts
-// @access Private
+// @access Public
 
 const getAllPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({}).populate({
@@ -35,4 +35,16 @@ const getAllPosts = asyncHandler(async (req, res) => {
   res.json(posts)
 })
 
-export { createPost, getAllPosts }
+// @desc   Get logged in user post
+// @route  GET /api/posts/myPosts
+// @access Private
+
+const getMyPosts = asyncHandler(async (req, res) => {
+  const posts = await Post.find({ postedBy: req.user._id }).populate({
+    path: 'postedBy',
+    select: 'name email -_id',
+  })
+  res.json(posts)
+})
+
+export { createPost, getAllPosts, getMyPosts }
