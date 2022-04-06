@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler'
 import Post from '../models/postModel.js'
 
 // @desc   Create a new post
-// @route  POST /api/posts/createpost
+// @route  POST /api/posts/createPost
 // @access Private
 
 const createPost = asyncHandler(async (req, res) => {
@@ -23,4 +23,16 @@ const createPost = asyncHandler(async (req, res) => {
   res.status(201).json(createdPost)
 })
 
-export { createPost }
+// @desc   Fetch all posts
+// @route  GET /api/posts/allPosts
+// @access Private
+
+const getAllPosts = asyncHandler(async (req, res) => {
+  const posts = await Post.find({}).populate({
+    path: 'postedBy',
+    select: 'name email -_id',
+  })
+  res.json(posts)
+})
+
+export { createPost, getAllPosts }
