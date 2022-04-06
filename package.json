@@ -5,7 +5,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "start": "node backend/server",
     "server": "nodemon backend/server",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tue",
