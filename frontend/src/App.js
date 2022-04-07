@@ -11,14 +11,16 @@ function App() {
     <>
       <Router>
         <Navbar />
-        <Container>
-          <Routes>
-            <Route path='/' element={<HomeScreen />} />
-            <Route path='/profile' element={<ProfileScreen />} />
-            <Route path='/signin' element={<SigninScreen />} />
-            <Route path='/signup' element={<SignupScreen />} />
-          </Routes>
-        </Container>
+        <main>
+          <Container>
+            <Routes>
+              <Route path='/' element={<HomeScreen />} />
+              <Route path='/profile' element={<ProfileScreen />} />
+              <Route path='/signin' element={<SigninScreen />} />
+              <Route path='/signup' element={<SignupScreen />} />
+            </Routes>
+          </Container>
+        </main>
       </Router>
     </>
   )

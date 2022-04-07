@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const Header = () => {
   return (
     <header>
-      <Navbar bg='light' expand='lg'>
+      <Navbar bg='light' expand='lg' fixed='top'>
         <Container>
           <Navbar.Brand as={Link} to='/' className='brand-logo'>
             Instagram

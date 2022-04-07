@@ -22,3 +22,12 @@ code {
 h2 {
   font-family: 'Grand Hotel', cursive;
 }
+
+main {
+  padding-top: 80px;
+}
+@media (max-width: 979px) {
+  main {
+    padding-top: 80px;
+  }
+}
