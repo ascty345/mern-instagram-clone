@@ -29,7 +29,7 @@ const SignupScreen = () => {
             </Form.Group>
 
             <Form.Group className='text-center'>
-              <Button variant='primary' type='submit'>
+              <Button variant='outline-success' type='submit'>
                 Sign Up
               </Button>
             </Form.Group>

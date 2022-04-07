@@ -29,7 +29,7 @@ const SigninScreen = () => {
             </Form.Group>
 
             <Form.Group className='text-center'>
-              <Button variant='primary' type='submit'>
+              <Button variant='outline-success' type='submit'>
                 Log In
               </Button>
             </Form.Group>
