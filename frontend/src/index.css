@@ -14,7 +14,11 @@ code {
     monospace;
 }
 
-.brand-logo,
+.brand-logo {
+  font-family: 'Grand Hotel', cursive;
+  font-size: 2.5em !important;
+}
+
 h2 {
   font-family: 'Grand Hotel', cursive;
 }

@@ -1,42 +1,42 @@
 import React from 'react'
+import { Form, Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const SigninScreen = () => {
   return (
-    <div className='row'>
-      <div className='card col s6 offset-s3'>
-        <h2 className='center-align'>Instagram</h2>
-        <div className='row'>
-          <form className='col s12'>
-            <div className='row'>
-              <div className='input-field col s12'>
-                <input id='email' type='email' placeholder='Enter your email' />
-              </div>
-              <div className='input-field col s12'>
-                <input
-                  id='password'
-                  type='password'
-                  placeholder='Enter your password'
-                />
-              </div>
-            </div>
-            <div className='row center-align'>
-              <button
-                className='btn  green darken-2'
-                type='submit'
-                name='action'>
-                Login
-              </button>
-            </div>
-            <h5 className='row center-align'>
-              <Link to='/signup' className='black-text'>
-                Don't have an account?
-              </Link>
-            </h5>
-          </form>
-        </div>
-      </div>
-    </div>
+    <>
+      <Card className='mx-auto mt-3'>
+        <Card.Body>
+          <Card.Title className='text-center'>
+            <h2>Instagram</h2>
+          </Card.Title>
+          <Form className='mt-3'>
+            <Form.Group className='mb-3' controlId='email'>
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type='email' placeholder='Enter email' />
+              <Form.Text className='text-muted'>
+                We'll never share your email with anyone else.
+              </Form.Text>
+            </Form.Group>
+
+            <Form.Group className='mb-3' controlId='password'>
+              <Form.Label>Password</Form.Label>
+              <Form.Control type='password' placeholder='Password' />
+            </Form.Group>
+
+            <Form.Group className='text-center mb-2'>
+              <Link to='/signup'>Don't have an account?</Link>
+            </Form.Group>
+
+            <Form.Group className='text-center'>
+              <Button variant='primary' type='submit'>
+                Log In
+              </Button>
+            </Form.Group>
+          </Form>
+        </Card.Body>
+      </Card>
+    </>
   )
 }
 
