@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 const SignupScreen = () => {
   return (
     <>
-      <Card className='mx-auto mt-3'>
+      <Card className='mx-auto mt-3' style={{ 'max-width': '50rem' }}>
         <Card.Body>
           <Card.Title className='text-center'>
-            <h2>Instagram</h2>
+            <h2>Sign Up</h2>
           </Card.Title>
           <Form className='mt-3'>
             <Form.Group className='mb-3' controlId='email'>
@@ -19,9 +19,16 @@ const SignupScreen = () => {
               </Form.Text>
             </Form.Group>
 
-            <Form.Group className='mb-3' controlId='password'>
+            <Form.Group className='mb-1' controlId='password'>
               <Form.Label>Password</Form.Label>
               <Form.Control type='password' placeholder='Password' />
+            </Form.Group>
+
+            <Form.Group className='mb-3' controlId='repeatPassword'>
+              <Form.Control
+                type='password'
+                placeholder='Repeat Your Password'
+              />
             </Form.Group>
 
             <Form.Group className='text-center mb-2'>

@@ -20,7 +20,10 @@ const HomeScreen = () => {
               controlId='comment'
               placeholder='Enter your comment here'
             />
-            <Button variant='light' type='submit'>
+            <Button
+              className='btn bg-transparent'
+              variant='light'
+              type='submit'>
               {' '}
               <i class='fa-regular fa-paper-plane'></i>
             </Button>

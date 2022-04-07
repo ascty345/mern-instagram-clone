@@ -24,6 +24,9 @@ const Header = () => {
               <Nav.Link as={Link} to='/profile'>
                 Profile
               </Nav.Link>
+              <Nav.Link as={Link} to='/createPost'>
+                Create Post
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

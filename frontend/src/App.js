@@ -5,6 +5,7 @@ import HomeScreen from './screens/HomeScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import SigninScreen from './screens/SigninScreen'
 import SignupScreen from './screens/SignupScreen'
+import CreatePostScreen from './screens/CreatePostScreen'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path='/profile' element={<ProfileScreen />} />
               <Route path='/signin' element={<SigninScreen />} />
               <Route path='/signup' element={<SignupScreen />} />
+              <Route path='/createPost' element={<CreatePostScreen />} />
             </Routes>
           </Container>
         </main>

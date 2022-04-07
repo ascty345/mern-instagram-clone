@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 const SigninScreen = () => {
   return (
     <>
-      <Card className='mx-auto mt-3'>
+      <Card className='mx-auto mt-3' style={{ 'max-width': '50rem' }}>
         <Card.Body>
           <Card.Title className='text-center'>
-            <h2>Instagram</h2>
+            <h2>Sign In</h2>
           </Card.Title>
           <Form className='mt-3'>
             <Form.Group className='mb-3' controlId='email'>
