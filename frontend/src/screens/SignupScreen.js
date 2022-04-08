@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button, Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -9,6 +9,7 @@ import { register } from '../actions/userActions'
 
 const SignupScreen = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -18,6 +19,12 @@ const SignupScreen = () => {
 
   const userRegister = useSelector((state) => state.userRegister)
   const { loading, error, userInfo } = userRegister
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/')
+    }
+  }, [navigate, userInfo])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -32,7 +39,7 @@ const SignupScreen = () => {
     <FormContainer>
       <Card className='mt-3'>
         <Card.Body>
-          <Card.Title className='text-center'>
+          <Card.Title className='text-center justify-content-center'>
             {message && <Message variant='danger'>{message}</Message>}
             {error && <Message variant='danger'>{error}</Message>}
             {loading && <Loader />}
