@@ -1,10 +1,11 @@
 import React from 'react'
 import { Card, Form, Button } from 'react-bootstrap'
+import FormContainer from '../components/FormContainer'
 
 const CreatePostScreen = () => {
   return (
-    <>
-      <Card className='mx-auto mt-3' style={{ 'max-width': '50rem' }}>
+    <FormContainer>
+      <Card className='mt-3'>
         <Card.Body>
           <Card.Title className='text-center'>
             <h3>Create Post</h3>
@@ -31,7 +32,7 @@ const CreatePostScreen = () => {
           </Form>
         </Card.Body>
       </Card>
-    </>
+    </FormContainer>
   )
 }
 

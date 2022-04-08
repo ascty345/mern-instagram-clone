@@ -1,11 +1,12 @@
 import React from 'react'
 import { Form, Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import FormContainer from '../components/FormContainer'
 
 const SigninScreen = () => {
   return (
-    <>
-      <Card className='mx-auto mt-3' style={{ 'max-width': '50rem' }}>
+    <FormContainer>
+      <Card className='mt-3'>
         <Card.Body>
           <Card.Title className='text-center'>
             <h2>Sign In</h2>
@@ -36,7 +37,7 @@ const SigninScreen = () => {
           </Form>
         </Card.Body>
       </Card>
-    </>
+    </FormContainer>
   )
 }
 
