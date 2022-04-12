@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { POST_LIST_RESET } from '../constants/postConstants'
+import { MY_POST_RESET, POST_LIST_RESET } from '../constants/postConstants'
 import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
@@ -88,4 +88,5 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo')
   dispatch({ type: USER_LOGOUT })
   dispatch({ type: POST_LIST_RESET })
+  dispatch({ type: MY_POST_RESET })
 }

@@ -26,7 +26,7 @@ const createPost = asyncHandler(async (req, res) => {
 
 // @desc   Fetch all posts
 // @route  GET /api/posts/allPosts
-// @access Public
+// @access Private
 
 const getAllPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({}).populate({

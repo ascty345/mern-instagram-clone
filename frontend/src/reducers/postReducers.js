@@ -6,6 +6,10 @@ import {
   POST_LIST_SUCCESS,
   POST_LIST_FAIL,
   POST_LIST_RESET,
+  MY_POST_REQUEST,
+  MY_POST_SUCCESS,
+  MY_POST_FAIL,
+  MY_POST_RESET,
 } from '../constants/postConstants'
 
 export const postSubmitReducer = (state = {}, action) => {
@@ -30,6 +34,21 @@ export const postListReducer = (state = { posts: [] }, action) => {
     case POST_LIST_FAIL:
       return { loading: false, error: action.payload }
     case POST_LIST_RESET:
+      return { posts: [] }
+    default:
+      return state
+  }
+}
+
+export const myPostReducer = (state = { posts: [] }, action) => {
+  switch (action.type) {
+    case MY_POST_REQUEST:
+      return { loading: true, posts: [] }
+    case MY_POST_SUCCESS:
+      return { loading: false, posts: action.payload }
+    case MY_POST_FAIL:
+      return { loading: false, error: action.payload }
+    case MY_POST_RESET:
       return { posts: [] }
     default:
       return state

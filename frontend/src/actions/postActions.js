@@ -6,6 +6,9 @@ import {
   POST_LIST_REQUEST,
   POST_LIST_SUCCESS,
   POST_LIST_FAIL,
+  MY_POST_REQUEST,
+  MY_POST_SUCCESS,
+  MY_POST_FAIL,
 } from '../constants/postConstants'
 
 export const postUpload = (post) => async (dispatch, getState) => {
@@ -62,6 +65,34 @@ export const listPost = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: POST_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const listMyPosts = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MY_POST_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get('/api/posts/myPosts', config)
+
+    dispatch({ type: MY_POST_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: MY_POST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
