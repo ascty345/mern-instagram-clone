@@ -16,9 +16,9 @@ function App() {
           <Container>
             <Routes>
               <Route path='/' element={<HomeScreen />} />
-              <Route path='/profile' element={<ProfileScreen />} />
-              <Route path='/signin' element={<SigninScreen />} />
               <Route path='/signup' element={<SignupScreen />} />
+              <Route path='/signin' element={<SigninScreen />} />
+              <Route path='/profile' element={<ProfileScreen />} />
               <Route path='/createPost' element={<CreatePostScreen />} />
             </Routes>
           </Container>

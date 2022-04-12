@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Container, Card, Row, Col, Stack } from 'react-bootstrap'
+import { Container, Card, Row, Col } from 'react-bootstrap'
+import Message from '../components/Message'
+import Loader from '../components/Loader'
 import { listMyPosts } from '../actions/postActions'
 
 const ProfileScreen = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
-  const { name: userName } = userInfo
 
   const myPosts = useSelector((state) => state.myPosts)
-  const { posts } = myPosts
+  const { loading, error, posts } = myPosts
 
   useEffect(() => {
     if (!userInfo) {
@@ -36,12 +37,18 @@ const ProfileScreen = () => {
           </Card>
         </Col>
         <Col xs={9}>
-          <h1>{userName}</h1>
+          {userInfo && <h1>{userInfo.name}</h1>}
           <div>40 posts 40 followers 40 following</div>
         </Col>
       </Row>
       <hr />
       <Row>
+        {error && <Message variant='danger'>{error}</Message>}
+        {loading && (
+          <Row className='d-flex justify-content-center'>
+            <Loader />
+          </Row>
+        )}
         {posts.map((post) => (
           <Col key={post._id} className='mb-3' xs={12} md={6} lg={4}>
             <Card className='border-0' style={{ maxWidth: '30rem' }}>
