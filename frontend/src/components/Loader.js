@@ -1,7 +1,8 @@
 import React from 'react'
+import { Spinner } from 'react-bootstrap'
 
 const Loader = () => {
-  return <div className='loader' />
+  return <Spinner animation='border' role='status'></Spinner>
 }
 
 export default Loader

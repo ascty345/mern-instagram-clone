@@ -6,9 +6,9 @@ import Post from '../models/postModel.js'
 // @access Private
 
 const createPost = asyncHandler(async (req, res) => {
-  const { title, body } = req.body
+  const { title, body, photo } = req.body
 
-  if (!title || !body) {
+  if (!title || !body || !photo) {
     res.status(422)
     throw new Error('Please add all the fields')
   }
@@ -16,6 +16,7 @@ const createPost = asyncHandler(async (req, res) => {
   const post = new Post({
     title,
     body,
+    photo,
     postedBy: req.user._id,
   })
 
