@@ -9,7 +9,7 @@ import {
 const router = express.Router()
 
 router.post('/createPost', protect, createPost)
-router.get('/allPosts', getAllPosts)
+router.get('/allPosts', protect, getAllPosts)
 router.get('/myPosts', protect, getMyPosts)
 
 export default router

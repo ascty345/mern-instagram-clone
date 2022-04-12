@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { POST_LIST_RESET } from '../constants/postConstants'
 import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
@@ -86,4 +87,5 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo')
   dispatch({ type: USER_LOGOUT })
+  dispatch({ type: POST_LIST_RESET })
 }
