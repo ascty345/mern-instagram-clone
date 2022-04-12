@@ -7,7 +7,6 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { useNavigate } from 'react-router-dom'
 import { postUpload } from '../actions/postActions'
-import { POST_UPLOAD_FAIL } from '../constants/postConstants'
 
 const CreatePostScreen = () => {
   const dispatch = useDispatch()
@@ -16,7 +15,7 @@ const CreatePostScreen = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState('')
-  const [file, setFile] = useState(null)
+  const [message, setMessage] = useState(null)
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -46,17 +45,11 @@ const CreatePostScreen = () => {
 
       setImage(imageUrl)
     } catch (error) {
-      dispatch({
-        type: POST_UPLOAD_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      })
+      setMessage('Failed to upload image')
     }
   }
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
     dispatch(postUpload({ title, body: description, photo: image }))
   }
@@ -65,6 +58,7 @@ const CreatePostScreen = () => {
     <FormContainer>
       <Card className='mt-3'>
         <Card.Body>
+          {message && <Message variant='warning'>{message}</Message>}
           {error && <Message variant='danger'>{error}</Message>}
           {success && (
             <Message variant='success'>Post uploaded successfully</Message>
