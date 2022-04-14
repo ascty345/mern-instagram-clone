@@ -48,4 +48,51 @@ const getMyPosts = asyncHandler(async (req, res) => {
   res.json(posts)
 })
 
-export { createPost, getAllPosts, getMyPosts }
+// @desc   Like a post
+// @route  PUT /api/posts/:id/likePost
+// @access Private
+
+const likePost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id)
+
+  // Check if the post has already been liked
+  if (
+    post.likes.filter((like) => like.user.toString() === req.user.id).length > 0
+  ) {
+    res.status(400)
+    throw new Error('You already liked the post')
+  }
+
+  post.likes.unshift({ user: req.user.id })
+
+  await post.save()
+  res.json(post.likes)
+})
+
+// @desc   unLike a post
+// @route  PUT /api/posts/:id/unLikePost
+// @access Private
+
+const unLikePost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id)
+
+  // Check if the post has already been liked
+  if (
+    post.likes.filter((like) => like.user.toString() === req.user.id).length ===
+    0
+  ) {
+    res.status(400)
+    throw new Error('Post has not yet been liked')
+  }
+  // Get remove index
+  const removeIndex = post.likes
+    .map((like) => like.user.toString())
+    .indexOf(req.user.id)
+
+  post.likes.splice(removeIndex, 1)
+
+  await post.save()
+  res.json(post.likes)
+})
+
+export { createPost, getAllPosts, getMyPosts, likePost, unLikePost }

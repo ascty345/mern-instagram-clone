@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { Card, Container, Button, Form, Stack, Row } from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -7,8 +8,7 @@ import { listPost } from '../actions/postActions'
 
 const HomeScreen = () => {
   const dispatch = useDispatch()
-
-  const [message, setMessage] = useState(null)
+  const navigate = useNavigate()
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -18,7 +18,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      setMessage('Please log in to see the posts')
+      navigate('/signin')
     } else {
       dispatch(listPost())
     }
@@ -26,9 +26,7 @@ const HomeScreen = () => {
 
   return (
     <Container className='my-3'>
-      {message ? (
-        <Message variant='warning'>{message}</Message>
-      ) : loading ? (
+      {loading ? (
         <Row className='d-flex justify-content-center'>
           <Loader />
         </Row>
