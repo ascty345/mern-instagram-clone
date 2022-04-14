@@ -43,7 +43,13 @@ const HomeScreen = () => {
             <Card.Header className='bg-white fw-bold'>
               {post.postedBy.name}
             </Card.Header>
-            <Card.Img variant='top' src={post.photo} />
+            <Card.Img
+              variant='top'
+              src={post.photo.replace(
+                /upload\//g,
+                'upload/c_crop,w_1000,h_1000/'
+              )}
+            />
             <Card.Body>
               <i className='fa-solid fa-heart' style={{ color: 'red' }}></i>
               <Card.Title className='fs-5'>{post.title}</Card.Title>
