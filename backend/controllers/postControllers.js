@@ -95,4 +95,24 @@ const unLikePost = asyncHandler(async (req, res) => {
   res.json(post.likes)
 })
 
-export { createPost, getAllPosts, getMyPosts, likePost, unLikePost }
+// @desc   Comment a post
+// @route  PUT /api/posts/:id/commentPost
+// @access Private
+
+const commentPost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id)
+
+  post.comments.unshift({ user: req.user.id, comment: req.body.comment })
+
+  await post.save()
+  res.json(post.comments)
+})
+
+export {
+  createPost,
+  getAllPosts,
+  getMyPosts,
+  likePost,
+  unLikePost,
+  commentPost,
+}

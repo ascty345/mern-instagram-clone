@@ -24,6 +24,8 @@ const HomeScreen = () => {
     dispatch(unLikePost(postId))
   }
 
+  const submitCommentHandler = () => {}
+
   useEffect(() => {
     if (!userInfo) {
       navigate('/signin')
@@ -71,7 +73,7 @@ const HomeScreen = () => {
               {post.likes.length} likes
               <Card.Title className='fs-5'>{post.title}</Card.Title>
               <Card.Text>{post.body}</Card.Text>
-              <Form>
+              <Form onSubmit={submitCommentHandler}>
                 <Form.Group controlId='comment'>
                   <Stack direction='horizontal' gap={3}>
                     <Form.Control

@@ -1,5 +1,22 @@
 import mongoose from 'mongoose'
 
+const commentSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+)
+
 const postSchema = mongoose.Schema(
   {
     title: {
@@ -22,6 +39,7 @@ const postSchema = mongoose.Schema(
         },
       },
     ],
+    comments: [commentSchema],
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
