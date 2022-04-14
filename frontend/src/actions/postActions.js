@@ -9,12 +9,6 @@ import {
   MY_POST_REQUEST,
   MY_POST_SUCCESS,
   MY_POST_FAIL,
-  POST_LIKE_REQUEST,
-  POST_LIKE_SUCCESS,
-  POST_LIKE_FAIL,
-  POST_UNLIKE_REQUEST,
-  POST_UNLIKE_SUCCESS,
-  POST_UNLIKE_FAIL,
   POST_UPDATE_LIKES,
 } from '../constants/postConstants'
 
@@ -110,8 +104,6 @@ export const listMyPosts = () => async (dispatch, getState) => {
 
 export const likePost = (postId) => async (dispatch, getState) => {
   try {
-    dispatch({ type: POST_LIKE_REQUEST })
-
     const {
       userLogin: { userInfo },
     } = getState()
@@ -132,11 +124,9 @@ export const likePost = (postId) => async (dispatch, getState) => {
       type: POST_UPDATE_LIKES,
       payload: { postId, likes: data },
     })
-
-    dispatch({ type: POST_LIKE_SUCCESS })
   } catch (error) {
     dispatch({
-      type: POST_LIKE_FAIL,
+      type: POST_LIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -147,8 +137,6 @@ export const likePost = (postId) => async (dispatch, getState) => {
 
 export const unLikePost = (postId) => async (dispatch, getState) => {
   try {
-    dispatch({ type: POST_UNLIKE_REQUEST })
-
     const {
       userLogin: { userInfo },
     } = getState()
@@ -169,14 +157,9 @@ export const unLikePost = (postId) => async (dispatch, getState) => {
       type: POST_UPDATE_LIKES,
       payload: { postId, likes: data },
     })
-
-    dispatch({
-      type: POST_UNLIKE_SUCCESS,
-    })
-    listMyPosts()
   } catch (error) {
     dispatch({
-      type: POST_UNLIKE_FAIL,
+      type: POST_LIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
