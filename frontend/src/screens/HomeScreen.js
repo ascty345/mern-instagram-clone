@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Card, Container, Button, Form, Stack, Row } from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { listPost } from '../actions/postActions'
+import { listPost, likePost, unLikePost } from '../actions/postActions'
 
 const HomeScreen = () => {
   const dispatch = useDispatch()
@@ -16,13 +16,21 @@ const HomeScreen = () => {
   const postList = useSelector((state) => state.postList)
   const { loading, error, posts } = postList
 
+  const likePostHandler = (postId) => {
+    dispatch(likePost(postId))
+  }
+
+  const unLikePostHandler = (postId) => {
+    dispatch(unLikePost(postId))
+  }
+
   useEffect(() => {
     if (!userInfo) {
       navigate('/signin')
     } else {
       dispatch(listPost())
     }
-  }, [dispatch, userInfo])
+  }, [navigate, dispatch, userInfo])
 
   return (
     <Container className='my-3'>
@@ -43,13 +51,24 @@ const HomeScreen = () => {
             </Card.Header>
             <Card.Img
               variant='top'
-              src={post.photo.replace(
-                /upload\//g,
-                'upload/c_crop,w_1000,h_1000/'
-              )}
+              src={post.photo.replace(/upload\//g, 'upload/c_fit,w_500,h_500/')}
             />
             <Card.Body>
-              <i className='fa-solid fa-heart' style={{ color: 'red' }}></i>
+              {post.likes.filter(
+                (like) => like.user.toString() === userInfo._id
+              ).length > 0 ? (
+                <i
+                  onClick={unLikePostHandler.bind(null, post._id)}
+                  className='fa-solid fa-heart'
+                  style={{ color: 'red' }}
+                />
+              ) : (
+                <i
+                  onClick={likePostHandler.bind(null, post._id)}
+                  className='fa-regular fa-heart'
+                />
+              )}{' '}
+              {post.likes.length} likes
               <Card.Title className='fs-5'>{post.title}</Card.Title>
               <Card.Text>{post.body}</Card.Text>
               <Form>

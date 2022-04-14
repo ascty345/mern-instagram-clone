@@ -10,6 +10,13 @@ import {
   MY_POST_SUCCESS,
   MY_POST_FAIL,
   MY_POST_RESET,
+  POST_LIKE_REQUEST,
+  POST_LIKE_SUCCESS,
+  POST_LIKE_FAIL,
+  POST_UNLIKE_REQUEST,
+  POST_UNLIKE_SUCCESS,
+  POST_UNLIKE_FAIL,
+  POST_UPDATE_LIKES,
 } from '../constants/postConstants'
 
 export const postSubmitReducer = (state = {}, action) => {
@@ -33,6 +40,16 @@ export const postListReducer = (state = { posts: [] }, action) => {
       return { loading: false, posts: action.payload }
     case POST_LIST_FAIL:
       return { loading: false, error: action.payload }
+    case POST_UPDATE_LIKES:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload.postId
+            ? { ...post, likes: action.payload.likes }
+            : post
+        ),
+        loading: false,
+      }
     case POST_LIST_RESET:
       return { posts: [] }
     default:
@@ -50,6 +67,32 @@ export const myPostReducer = (state = { posts: [] }, action) => {
       return { loading: false, error: action.payload }
     case MY_POST_RESET:
       return { posts: [] }
+    default:
+      return state
+  }
+}
+
+export const postLikeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_LIKE_REQUEST:
+      return { loading: true }
+    case POST_LIKE_SUCCESS:
+      return { loading: false, data: action.payload }
+    case POST_LIKE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const postUnLikeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_UNLIKE_REQUEST:
+      return { loading: true }
+    case POST_UNLIKE_SUCCESS:
+      return { loading: false, data: action.payload }
+    case POST_UNLIKE_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }

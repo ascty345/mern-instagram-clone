@@ -29,7 +29,7 @@ const Header = () => {
               {userInfo ? (
                 <>
                   <Nav.Link as={Link} to='/profile'>
-                    Profile
+                    {userInfo.name}
                   </Nav.Link>
                   <Nav.Link as={Link} to='/createPost'>
                     Create Post

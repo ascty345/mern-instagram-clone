@@ -5,6 +5,8 @@ import { userRegisterReducer, userLoginReducer } from './reducers/userReducers'
 import {
   postSubmitReducer,
   postListReducer,
+  postLikeReducer,
+  postUnLikeReducer,
   myPostReducer,
 } from './reducers/postReducers'
 
@@ -13,6 +15,8 @@ const reducer = combineReducers({
   userLogin: userLoginReducer,
   postSubmit: postSubmitReducer,
   postList: postListReducer,
+  postLike: postLikeReducer,
+  postUnLike: postUnLikeReducer,
   myPosts: myPostReducer,
 })
 
