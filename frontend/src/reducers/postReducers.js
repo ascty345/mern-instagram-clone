@@ -11,6 +11,7 @@ import {
   MY_POST_FAIL,
   MY_POST_RESET,
   POST_UPDATE_LIKES,
+  POST_ADD_COMMENTS,
 } from '../constants/postConstants'
 
 export const postSubmitReducer = (state = {}, action) => {
@@ -40,6 +41,16 @@ export const postListReducer = (state = { posts: [] }, action) => {
         posts: state.posts.map((post) =>
           post._id === action.payload.postId
             ? { ...post, likes: action.payload.likes }
+            : post
+        ),
+        loading: false,
+      }
+    case POST_ADD_COMMENTS:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload.postId
+            ? { ...post, comments: action.payload.comments }
             : post
         ),
         loading: false,

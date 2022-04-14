@@ -1,10 +1,23 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Card, Container, Button, Form, Stack, Row } from 'react-bootstrap'
+import {
+  Card,
+  Container,
+  Button,
+  Form,
+  Stack,
+  Row,
+  ListGroup,
+} from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { listPost, likePost, unLikePost } from '../actions/postActions'
+import {
+  listPost,
+  likePost,
+  unLikePost,
+  commentPost,
+} from '../actions/postActions'
 
 const HomeScreen = () => {
   const dispatch = useDispatch()
@@ -24,7 +37,9 @@ const HomeScreen = () => {
     dispatch(unLikePost(postId))
   }
 
-  const submitCommentHandler = () => {}
+  const submitCommentHandler = (postId, comment) => {
+    dispatch(commentPost(postId, comment))
+  }
 
   useEffect(() => {
     if (!userInfo) {
@@ -73,7 +88,20 @@ const HomeScreen = () => {
               {post.likes.length} likes
               <Card.Title className='fs-5'>{post.title}</Card.Title>
               <Card.Text>{post.body}</Card.Text>
-              <Form onSubmit={submitCommentHandler}>
+              <ListGroup className='mb-3 list-group-flush'>
+                {post.comments.map((comment) => (
+                  <ListGroup.Item key={comment._id}>
+                    <span className='fs-9 fw-bold'>{comment.user.name}: </span>
+                    {comment.comment}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+              <Form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  submitCommentHandler(post._id, e.target[0].value)
+                  e.target[0].value = ''
+                }}>
                 <Form.Group controlId='comment'>
                   <Stack direction='horizontal' gap={3}>
                     <Form.Control

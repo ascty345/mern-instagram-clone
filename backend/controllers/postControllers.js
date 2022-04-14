@@ -29,10 +29,15 @@ const createPost = asyncHandler(async (req, res) => {
 // @access Private
 
 const getAllPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({}).populate({
-    path: 'postedBy',
-    select: 'name email -_id',
-  })
+  const posts = await Post.find({})
+    .populate({
+      path: 'comments.user',
+      select: 'name _id',
+    })
+    .populate({
+      path: 'postedBy',
+      select: 'name email -_id',
+    })
   res.json(posts)
 })
 
@@ -105,7 +110,12 @@ const commentPost = asyncHandler(async (req, res) => {
   post.comments.unshift({ user: req.user.id, comment: req.body.comment })
 
   await post.save()
-  res.json(post.comments)
+
+  const commentedPost = await Post.findById(req.params.id).populate({
+    path: 'comments.user',
+    select: 'name _id',
+  })
+  res.json(commentedPost.comments)
 })
 
 export {

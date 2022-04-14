@@ -14,3 +14,4 @@ export const MY_POST_FAIL = 'MY_POST_FAIL'
 export const MY_POST_RESET = 'MY_POST_RESET'
 
 export const POST_UPDATE_LIKES = 'POST_UPDATE_LIKES'
+export const POST_ADD_COMMENTS = 'POST_ADD_COMMENTS'

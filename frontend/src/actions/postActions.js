@@ -10,6 +10,7 @@ import {
   MY_POST_SUCCESS,
   MY_POST_FAIL,
   POST_UPDATE_LIKES,
+  POST_ADD_COMMENTS,
 } from '../constants/postConstants'
 
 export const postUpload = (post) => async (dispatch, getState) => {
@@ -156,6 +157,40 @@ export const unLikePost = (postId) => async (dispatch, getState) => {
     dispatch({
       type: POST_UPDATE_LIKES,
       payload: { postId, likes: data },
+    })
+  } catch (error) {
+    dispatch({
+      type: POST_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const commentPost = (postId, comment) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(
+      `/api/posts/${postId}/commentPost`,
+      { comment },
+      config
+    )
+
+    dispatch({
+      type: POST_ADD_COMMENTS,
+      payload: { postId, comments: data },
     })
   } catch (error) {
     dispatch({
