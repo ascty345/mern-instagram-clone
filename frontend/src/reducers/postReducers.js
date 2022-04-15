@@ -12,6 +12,7 @@ import {
   MY_POST_RESET,
   POST_UPDATE_LIKES,
   POST_ADD_COMMENTS,
+  POST_DELETE,
 } from '../constants/postConstants'
 
 export const postSubmitReducer = (state = {}, action) => {
@@ -53,6 +54,13 @@ export const postListReducer = (state = { posts: [] }, action) => {
             ? { ...post, comments: action.payload.comments }
             : post
         ),
+        loading: false,
+      }
+    case POST_DELETE:
+      return {
+        ...state,
+        posts: state.posts.filter((post) => post._id !== action.payload.postId),
+        deleteConfirm: action.payload.message,
         loading: false,
       }
     case POST_LIST_RESET:

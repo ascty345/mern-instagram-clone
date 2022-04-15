@@ -9,6 +9,7 @@ import {
   Stack,
   Row,
   ListGroup,
+  Col,
 } from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -17,6 +18,7 @@ import {
   likePost,
   unLikePost,
   commentPost,
+  deletePost,
 } from '../actions/postActions'
 
 const HomeScreen = () => {
@@ -27,7 +29,7 @@ const HomeScreen = () => {
   const { userInfo } = userLogin
 
   const postList = useSelector((state) => state.postList)
-  const { loading, error, posts } = postList
+  const { loading, error, posts, deleteConfirm } = postList
 
   const likePostHandler = (postId) => {
     dispatch(likePost(postId))
@@ -35,6 +37,10 @@ const HomeScreen = () => {
 
   const unLikePostHandler = (postId) => {
     dispatch(unLikePost(postId))
+  }
+
+  const deletePostHandler = (postId) => {
+    dispatch(deletePost(postId))
   }
 
   const submitCommentHandler = (postId, comment) => {
@@ -51,6 +57,7 @@ const HomeScreen = () => {
 
   return (
     <Container className='my-3'>
+      {deleteConfirm && <Message variant='success'>{deleteConfirm}</Message>}
       {loading ? (
         <Row className='d-flex justify-content-center'>
           <Loader />
@@ -64,7 +71,18 @@ const HomeScreen = () => {
             key={post._id}
             style={{ maxWidth: '40rem' }}>
             <Card.Header className='bg-white fw-bold'>
-              {post.postedBy.name}
+              <Row>
+                <Col>{post.postedBy.name}</Col>
+                {post.postedBy._id === userInfo._id && (
+                  <Col className='text-end'>
+                    <i
+                      onClick={deletePostHandler.bind(null, post._id)}
+                      className='fa-solid fa-trash'
+                      style={{ color: 'black' }}
+                    />
+                  </Col>
+                )}
+              </Row>
             </Card.Header>
             <Card.Img
               variant='top'
