@@ -36,8 +36,9 @@ const getAllPosts = asyncHandler(async (req, res) => {
     })
     .populate({
       path: 'postedBy',
-      select: 'name email -_id',
+      select: 'name email',
     })
+    .sort({ updatedAt: -1 })
   res.json(posts)
 })
 
@@ -118,6 +119,29 @@ const commentPost = asyncHandler(async (req, res) => {
   res.json(commentedPost.comments)
 })
 
+// @desc   Delete a post
+// @route  DELETE /api/posts/:id
+// @access Private
+
+const deletePost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id)
+
+  if (!post) {
+    res.status(404)
+    throw new Error('Post not found')
+  }
+
+  //Check user
+  if (post.postedBy.toString() !== req.user._id.toString()) {
+    res.status(401)
+    throw new Error('User not authorized')
+  }
+
+  await post.remove()
+
+  res.json('Post removed')
+})
+
 export {
   createPost,
   getAllPosts,
@@ -125,4 +149,5 @@ export {
   likePost,
   unLikePost,
   commentPost,
+  deletePost,
 }

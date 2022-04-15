@@ -7,6 +7,7 @@ import {
   likePost,
   unLikePost,
   commentPost,
+  deletePost,
 } from '../controllers/postControllers.js'
 
 const router = express.Router()
@@ -17,5 +18,6 @@ router.get('/myPosts', protect, getMyPosts)
 router.put('/:id/likePost', protect, likePost)
 router.put('/:id/unLikePost', protect, unLikePost)
 router.put('/:id/commentPost', protect, commentPost)
+router.delete('/:id', protect, deletePost)
 
 export default router
