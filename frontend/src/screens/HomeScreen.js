@@ -39,8 +39,8 @@ const HomeScreen = () => {
     dispatch(unLikePost(postId))
   }
 
-  const deletePostHandler = (postId) => {
-    dispatch(deletePost(postId))
+  const deletePostHandler = (postId, photoId) => {
+    dispatch(deletePost(postId, photoId))
   }
 
   const submitCommentHandler = (postId, comment) => {
@@ -57,7 +57,6 @@ const HomeScreen = () => {
 
   return (
     <Container className='my-3'>
-      {deleteConfirm && <Message variant='success'>{deleteConfirm}</Message>}
       {loading ? (
         <Row className='d-flex justify-content-center'>
           <Loader />
@@ -65,80 +64,99 @@ const HomeScreen = () => {
       ) : error ? (
         <Message variant='danger'>{error}</Message>
       ) : (
-        posts.map((post) => (
-          <Card
-            className='mx-auto my-3'
-            key={post._id}
-            style={{ maxWidth: '40rem' }}>
-            <Card.Header className='bg-white fw-bold'>
-              <Row>
-                <Col>{post.postedBy.name}</Col>
-                {post.postedBy._id === userInfo._id && (
-                  <Col className='text-end'>
-                    <i
-                      onClick={deletePostHandler.bind(null, post._id)}
-                      className='fa-solid fa-trash'
-                      style={{ color: 'black' }}
-                    />
-                  </Col>
+        posts.map((post) =>
+          post.deleted ? (
+            deleteConfirm && (
+              <Message variant='success'>{deleteConfirm}</Message>
+            )
+          ) : (
+            <Card
+              className='mx-auto my-3'
+              key={post._id}
+              style={{ maxWidth: '40rem' }}>
+              <Card.Header className='bg-white fw-bold'>
+                <Row>
+                  <Col>{post.postedBy.name}</Col>
+                  {post.postedBy._id === userInfo._id && (
+                    <Col className='text-end'>
+                      <i
+                        onClick={() => {
+                          deletePostHandler(
+                            post._id,
+                            post.photo.substring(
+                              post.photo.indexOf('instagram-clone/'),
+                              post.photo.indexOf('.jpg')
+                            )
+                          )
+                        }}
+                        className='fa-solid fa-trash'
+                        style={{ color: 'black' }}
+                      />
+                    </Col>
+                  )}
+                </Row>
+              </Card.Header>
+              <Card.Img
+                variant='top'
+                src={post.photo.replace(
+                  /upload\//g,
+                  'upload/c_fit,w_500,h_500/'
                 )}
-              </Row>
-            </Card.Header>
-            <Card.Img
-              variant='top'
-              src={post.photo.replace(/upload\//g, 'upload/c_fit,w_500,h_500/')}
-            />
-            <Card.Body>
-              {post.likes.filter(
-                (like) => like.user.toString() === userInfo._id
-              ).length > 0 ? (
-                <i
-                  onClick={unLikePostHandler.bind(null, post._id)}
-                  className='fa-solid fa-heart'
-                  style={{ color: 'red' }}
-                />
-              ) : (
-                <i
-                  onClick={likePostHandler.bind(null, post._id)}
-                  className='fa-regular fa-heart'
-                />
-              )}{' '}
-              {post.likes.length} likes
-              <Card.Title className='fs-5'>{post.title}</Card.Title>
-              <Card.Text>{post.body}</Card.Text>
-              <ListGroup className='mb-3 list-group-flush'>
-                {post.comments.map((comment) => (
-                  <ListGroup.Item key={comment._id}>
-                    <span className='fs-9 fw-bold'>{comment.user.name}: </span>
-                    {comment.comment}
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-              <Form
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  submitCommentHandler(post._id, e.target[0].value)
-                  e.target[0].value = ''
-                }}>
-                <Form.Group controlId='comment'>
-                  <Stack direction='horizontal' gap={3}>
-                    <Form.Control
-                      className='border-0'
-                      placeholder='Enter your comment here'
-                    />
-                    <Button
-                      className='btn bg-transparent'
-                      variant='light'
-                      type='submit'>
-                      {' '}
-                      <i className='fa-regular fa-paper-plane'></i>
-                    </Button>
-                  </Stack>
-                </Form.Group>
-              </Form>
-            </Card.Body>
-          </Card>
-        ))
+              />
+              <Card.Body>
+                {post.likes.filter(
+                  (like) => like.user.toString() === userInfo._id
+                ).length > 0 ? (
+                  <i
+                    onClick={unLikePostHandler.bind(null, post._id)}
+                    className='fa-solid fa-heart'
+                    style={{ color: 'red' }}
+                  />
+                ) : (
+                  <i
+                    onClick={likePostHandler.bind(null, post._id)}
+                    className='fa-regular fa-heart'
+                  />
+                )}{' '}
+                {post.likes.length} likes
+                <Card.Title className='fs-5'>{post.title}</Card.Title>
+                <Card.Text>{post.body}</Card.Text>
+                <ListGroup className='mb-3 list-group-flush'>
+                  {post.comments.map((comment) => (
+                    <ListGroup.Item key={comment._id}>
+                      <span className='fs-9 fw-bold'>
+                        {comment.user.name}:{' '}
+                      </span>
+                      {comment.comment}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    submitCommentHandler(post._id, e.target[0].value)
+                    e.target[0].value = ''
+                  }}>
+                  <Form.Group controlId='comment'>
+                    <Stack direction='horizontal' gap={3}>
+                      <Form.Control
+                        className='border-0'
+                        placeholder='Enter your comment here'
+                      />
+                      <Button
+                        className='btn bg-transparent'
+                        variant='light'
+                        type='submit'>
+                        {' '}
+                        <i className='fa-regular fa-paper-plane'></i>
+                      </Button>
+                    </Stack>
+                  </Form.Group>
+                </Form>
+              </Card.Body>
+            </Card>
+          )
+        )
       )}
     </Container>
   )

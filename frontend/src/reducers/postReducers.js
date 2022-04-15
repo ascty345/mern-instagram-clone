@@ -59,7 +59,9 @@ export const postListReducer = (state = { posts: [] }, action) => {
     case POST_DELETE:
       return {
         ...state,
-        posts: state.posts.filter((post) => post._id !== action.payload.postId),
+        posts: state.posts.map((post) =>
+          post._id === action.payload.postId ? { ...post, deleted: true } : post
+        ),
         deleteConfirm: action.payload.message,
         loading: false,
       }

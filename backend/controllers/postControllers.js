@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler'
+import { cloudinary } from '../config/cloudinary.js'
 import Post from '../models/postModel.js'
 
 // @desc   Create a new post
@@ -6,7 +7,8 @@ import Post from '../models/postModel.js'
 // @access Private
 
 const createPost = asyncHandler(async (req, res) => {
-  const { title, body, photo } = req.body
+  const { title, body } = req.body
+  const photo = req.file.path
 
   if (!title || !body || !photo) {
     res.status(422)
@@ -120,7 +122,7 @@ const commentPost = asyncHandler(async (req, res) => {
 })
 
 // @desc   Delete a post
-// @route  DELETE /api/posts/:id
+// @route  POST /api/posts/:id/delete
 // @access Private
 
 const deletePost = asyncHandler(async (req, res) => {
@@ -137,6 +139,8 @@ const deletePost = asyncHandler(async (req, res) => {
     throw new Error('User not authorized')
   }
 
+  // console.log(req.body.photoId)
+  await cloudinary.uploader.destroy(req.body.photoId)
   await post.remove()
 
   res.json('Post removed')

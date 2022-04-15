@@ -1,4 +1,5 @@
 import express from 'express'
+import multer from 'multer'
 import { protect } from '../middlewares/authMiddleware.js'
 import {
   createPost,
@@ -9,15 +10,17 @@ import {
   commentPost,
   deletePost,
 } from '../controllers/postControllers.js'
+import { storage } from '../config/cloudinary.js'
 
 const router = express.Router()
+const upload = multer({ storage })
 
-router.post('/createPost', protect, createPost)
+router.post('/createPost', protect, upload.single('photo'), createPost)
 router.get('/allPosts', protect, getAllPosts)
 router.get('/myPosts', protect, getMyPosts)
 router.put('/:id/likePost', protect, likePost)
 router.put('/:id/unLikePost', protect, unLikePost)
 router.put('/:id/commentPost', protect, commentPost)
-router.delete('/:id', protect, deletePost)
+router.post('/:id/delete', protect, deletePost) // Delete post
 
 export default router

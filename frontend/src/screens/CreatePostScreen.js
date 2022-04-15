@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { Card, Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,7 +14,6 @@ const CreatePostScreen = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState('')
-  const [message, setMessage] = useState(null)
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -29,36 +27,19 @@ const CreatePostScreen = () => {
     }
   }, [navigate, userInfo])
 
-  const fileChangeHandler = async (e) => {
-    const file = e.target.files[0]
-    try {
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('upload_preset', 'instagram-clone')
-
-      const {
-        data: { secure_url: imageUrl },
-      } = await axios.post(
-        'https://api.cloudinary.com/v1_1/doop2lt0g/image/upload',
-        formData
-      )
-
-      setImage(imageUrl)
-    } catch (error) {
-      setMessage('Failed to upload image')
-    }
-  }
-
   const submitHandler = async (e) => {
     e.preventDefault()
-    dispatch(postUpload({ title, body: description, photo: image }))
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('body', description)
+    formData.append('photo', image)
+    dispatch(postUpload(formData))
   }
 
   return (
     <FormContainer>
       <Card className='mt-3'>
         <Card.Body>
-          {message && <Message variant='warning'>{message}</Message>}
           {error && <Message variant='danger'>{error}</Message>}
           {success && (
             <Message variant='success'>Post uploaded successfully</Message>
@@ -92,7 +73,10 @@ const CreatePostScreen = () => {
 
             <Form.Group className='mb-2' controlId='image'>
               <Form.Label>Upload Image</Form.Label>
-              <Form.Control type='file' onChange={fileChangeHandler} />
+              <Form.Control
+                type='file'
+                onChange={(e) => setImage(e.target.files[0])}
+              />
             </Form.Group>
 
             <Form.Group className='text-center'>

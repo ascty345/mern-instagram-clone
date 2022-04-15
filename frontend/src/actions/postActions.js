@@ -14,7 +14,7 @@ import {
   POST_DELETE,
 } from '../constants/postConstants'
 
-export const postUpload = (post) => async (dispatch, getState) => {
+export const postUpload = (formData) => async (dispatch, getState) => {
   try {
     dispatch({
       type: POST_UPLOAD_REQUEST,
@@ -26,12 +26,12 @@ export const postUpload = (post) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'multipart/form-data', //We may not need this!
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
 
-    const { data } = await axios.post('/api/posts/createPost', post, config)
+    const { data } = await axios.post('/api/posts/createPost', formData, config)
 
     dispatch({
       type: POST_UPLOAD_SUCCESS,
@@ -204,7 +204,7 @@ export const commentPost = (postId, comment) => async (dispatch, getState) => {
   }
 }
 
-export const deletePost = (postId) => async (dispatch, getState) => {
+export const deletePost = (postId, photoId) => async (dispatch, getState) => {
   try {
     const {
       userLogin: { userInfo },
@@ -212,11 +212,16 @@ export const deletePost = (postId) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
 
-    const { data } = await axios.delete(`/api/posts/${postId}`, config)
+    const { data } = await axios.post(
+      `/api/posts/${postId}/delete`,
+      { photoId },
+      config
+    )
 
     dispatch({
       type: POST_DELETE,
