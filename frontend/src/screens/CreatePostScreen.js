@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Form, Button } from 'react-bootstrap'
+import { Card, Form, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
@@ -44,7 +44,13 @@ const CreatePostScreen = () => {
           {success && (
             <Message variant='success'>Post uploaded successfully</Message>
           )}
-          {loading && <Loader />}
+          {loading && (
+            <Row>
+              <Col className='d-flex justify-content-center'>
+                <Loader className='me-auto' />
+              </Col>
+            </Row>
+          )}
           <Card.Title className='text-center'>
             <h3>Create Post</h3>
           </Card.Title>

@@ -67,7 +67,12 @@ const HomeScreen = () => {
         posts.map((post) =>
           post.deleted ? (
             deleteConfirm && (
-              <Message variant='success'>{deleteConfirm}</Message>
+              <Row
+                className='mx-auto mt-3'
+                key={post._id}
+                style={{ maxWidth: '40rem' }}>
+                <Message variant='success'>{deleteConfirm}</Message>
+              </Row>
             )
           ) : (
             <Card

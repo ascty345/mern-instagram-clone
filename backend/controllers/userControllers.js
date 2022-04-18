@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import generateToken from '../utils/generateToken.js'
 import User from '../models/userModel.js'
+import Post from '../models/postModel.js'
 
 // @desc   Register a new user
 // @route  POST /api/users/signup
@@ -56,4 +57,33 @@ const authUser = asyncHandler(async (req, res) => {
   }
 })
 
-export { registerUser, authUser }
+// @desc   Get a user profile by the user's ID
+// @route  GET /api/users/:id
+// @access Private
+const getUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password')
+
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+
+  const postOfUser = await Post.find({ postedBy: req.params.id })
+    .populate({
+      path: 'comments.user',
+      select: 'name _id',
+    })
+    .populate({
+      path: 'postedBy',
+      select: 'name email',
+    })
+    .sort({ updatedAt: -1 })
+
+  if (postOfUser.length !== 0) {
+    res.json(postOfUser)
+  } else {
+    res.json({ message: 'This user has not posted anything yet' })
+  }
+})
+
+export { registerUser, authUser, getUserById }
