@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import {
   Card,
   Container,
@@ -81,7 +81,17 @@ const HomeScreen = () => {
               style={{ maxWidth: '40rem' }}>
               <Card.Header className='bg-white fw-bold'>
                 <Row>
-                  <Col>{post.postedBy.name}</Col>
+                  <Col>
+                    <Link
+                      to={
+                        post.postedBy._id !== userInfo._id
+                          ? `/profile/${post.postedBy._id}`
+                          : `/profile`
+                      }
+                      style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {post.postedBy.name}
+                    </Link>
+                  </Col>
                   {post.postedBy._id === userInfo._id && (
                     <Col className='text-end'>
                       <i

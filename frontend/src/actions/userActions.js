@@ -8,6 +8,9 @@ import {
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGOUT,
+  GET_OTHER_USER_POSTS_REQUEST,
+  GET_OTHER_USER_POSTS_FAIL,
+  GET_OTHER_USER_POSTS_SUCCESS,
 } from '../constants/userConstants'
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -89,4 +92,32 @@ export const logout = () => (dispatch) => {
   dispatch({ type: USER_LOGOUT })
   dispatch({ type: POST_LIST_RESET })
   dispatch({ type: MY_POST_RESET })
+}
+
+export const listOtherUserPosts = (userId) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GET_OTHER_USER_POSTS_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/users/${userId}`, config)
+
+    dispatch({ type: GET_OTHER_USER_POSTS_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: GET_OTHER_USER_POSTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
 }

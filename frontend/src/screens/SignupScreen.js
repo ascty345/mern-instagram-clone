@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
-import { register } from '../actions/userActions'
+import { register, login } from '../actions/userActions'
 
 const SignupScreen = () => {
   const dispatch = useDispatch()
@@ -18,7 +18,10 @@ const SignupScreen = () => {
   const [message, setMessage] = useState(null)
 
   const userRegister = useSelector((state) => state.userRegister)
-  const { loading, error, userInfo } = userRegister
+  const { loading, error } = userRegister
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   useEffect(() => {
     if (userInfo) {
@@ -32,6 +35,7 @@ const SignupScreen = () => {
       setMessage('Password do not match')
     } else {
       dispatch(register(name, email, password))
+      dispatch(login(email, password))
     }
   }
 

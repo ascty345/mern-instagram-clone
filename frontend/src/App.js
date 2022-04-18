@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap'
 import Navbar from './components/Navbar'
 import HomeScreen from './screens/HomeScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import ProfileOfOtherUserScreen from './screens/ProfileOfOtherUserScreen'
 import SigninScreen from './screens/SigninScreen'
 import SignupScreen from './screens/SignupScreen'
 import CreatePostScreen from './screens/CreatePostScreen'
@@ -19,6 +20,10 @@ function App() {
               <Route path='/signup' element={<SignupScreen />} />
               <Route path='/signin' element={<SigninScreen />} />
               <Route path='/profile' element={<ProfileScreen />} />
+              <Route
+                path='/profile/:id'
+                element={<ProfileOfOtherUserScreen />}
+              />
               <Route path='/createPost' element={<CreatePostScreen />} />
             </Routes>
           </Container>

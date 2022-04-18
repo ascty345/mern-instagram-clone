@@ -82,7 +82,8 @@ const getUserById = asyncHandler(async (req, res) => {
   if (postOfUser.length !== 0) {
     res.json(postOfUser)
   } else {
-    res.json({ message: 'This user has not posted anything yet' })
+    res.status(204)
+    throw new Error('This user has not posted anything yet')
   }
 })
 
