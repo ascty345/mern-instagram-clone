@@ -80,10 +80,9 @@ const getUserById = asyncHandler(async (req, res) => {
     .sort({ updatedAt: -1 })
 
   if (postOfUser.length !== 0) {
-    res.json(postOfUser)
+    res.json({ user, postOfUser })
   } else {
-    res.status(204)
-    throw new Error('This user has not posted anything yet')
+    res.json({ user, message: 'This user has not posted anything yet' })
   }
 })
 
