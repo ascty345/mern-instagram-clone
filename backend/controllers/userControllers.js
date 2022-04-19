@@ -86,4 +86,85 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 })
 
-export { registerUser, authUser, getUserById }
+// @desc   Follow a user
+// @route  PUT /api/users/follow
+// @access Private
+
+const follow = asyncHandler(async (req, res) => {
+  // Check following and follower ID
+  const user = await User.findById(req.user._id).select('-password')
+  const userToFollow = await User.findById(req.body.userToFollowId).select(
+    '-password'
+  )
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+  if (!userToFollow) {
+    res.status(404)
+    throw new Error('The user you want to follow not found')
+  }
+  // Check if the userToUnFollow has already been followed
+  if (
+    user.following.filter((user) => user.toString() === req.body.userToFollowId)
+      .length !== 0
+  ) {
+    res.status(400)
+    throw new Error('User has already been followed')
+  }
+  //Save the result
+  user.following.unshift(req.body.userToFollowId)
+  await user.save()
+  userToFollow.followers.unshift(req.user.id)
+  await userToFollow.save()
+
+  res.json(user)
+})
+
+// @desc   UnFollow a user
+// @route  PUT /api/users/unfollow
+// @access Private
+
+const unfollow = asyncHandler(async (req, res) => {
+  // Check following and follower ID
+  const user = await User.findById(req.user._id).select('-password')
+  const userToUnFollow = await User.findById(req.body.userToUnFollowId).select(
+    '-password'
+  )
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+  if (!userToUnFollow) {
+    res.status(404)
+    throw new Error('The user you want to unfollow not found')
+  }
+
+  // Check if the userToUnFollow has already been followed
+  if (
+    user.following.filter(
+      (user) => user.toString() === req.body.userToUnFollowId
+    ).length === 0
+  ) {
+    res.status(400)
+    throw new Error('User has not yet been followed')
+  }
+
+  // Get unfollow index
+  const unfollowIndex = user.following
+    .map((user) => user.toString())
+    .indexOf(req.body.userToUnFollowId)
+
+  //Save the result
+  user.following.splice(unfollowIndex, 1)
+  await user.save()
+
+  // Update the result for the unfollowed person
+  await User.findByIdAndUpdate(req.body.userToUnFollowId, {
+    $pull: { followers: req.user._id },
+  })
+
+  res.json(user)
+})
+
+export { registerUser, authUser, getUserById, follow, unfollow }

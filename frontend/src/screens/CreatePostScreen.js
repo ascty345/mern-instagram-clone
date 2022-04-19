@@ -6,6 +6,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { useNavigate } from 'react-router-dom'
 import { postUpload } from '../actions/postActions'
+import { POST_UPLOAD_RESET } from '../constants/postConstants'
 
 const CreatePostScreen = () => {
   const dispatch = useDispatch()
@@ -25,7 +26,8 @@ const CreatePostScreen = () => {
     if (!userInfo) {
       navigate('/signin')
     }
-  }, [navigate, userInfo])
+    dispatch({ type: POST_UPLOAD_RESET })
+  }, [navigate, userInfo, dispatch])
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -41,9 +43,7 @@ const CreatePostScreen = () => {
       <Card className='mt-3'>
         <Card.Body>
           {error && <Message variant='danger'>{error}</Message>}
-          {success && (
-            <Message variant='success'>Post uploaded successfully</Message>
-          )}
+          {success && <Message>Post uploaded successfully</Message>}
           {loading && (
             <Row>
               <Col className='d-flex justify-content-center'>
