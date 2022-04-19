@@ -9,6 +9,11 @@ import {
   GET_OTHER_USER_POSTS_REQUEST,
   GET_OTHER_USER_POSTS_SUCCESS,
   GET_OTHER_USER_POSTS_FAIL,
+  FOLLOW_A_USER,
+  UNFOLLOW_A_USER,
+  FOLLOW_REQUEST_SUCESS,
+  FOLLOW_REQUEST_FAIL,
+  FOLLOW_RESET,
 } from '../constants/userConstants'
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -29,7 +34,10 @@ export const userLoginReducer = (state = { userInfo: null }, action) => {
     case USER_LOGIN_REQUEST:
       return { loading: true }
     case USER_LOGIN_SUCCESS:
-      return { loading: false, userInfo: action.payload }
+      return {
+        loading: false,
+        userInfo: action.payload,
+      }
     case USER_LOGIN_FAIL:
       return { loading: false, error: action.payload }
     case USER_LOGOUT:
@@ -39,14 +47,42 @@ export const userLoginReducer = (state = { userInfo: null }, action) => {
   }
 }
 
-export const getOtherUserPostsReducer = (state = { posts: [] }, action) => {
+export const userLoginFollowReducer = (
+  state = { followers: [], following: [] },
+  action
+) => {
+  switch (action.type) {
+    case FOLLOW_A_USER:
+      return { loading: true, ...state }
+    case UNFOLLOW_A_USER:
+      return { loading: true, ...state }
+    case FOLLOW_REQUEST_SUCESS:
+      return {
+        loading: false,
+        followers: action.payload.followers,
+        following: action.payload.following,
+      }
+    case FOLLOW_REQUEST_FAIL:
+      return {
+        loading: false,
+        ...state,
+        error: action.payload,
+      }
+    case FOLLOW_RESET:
+      return { followers: [], following: [] }
+    default:
+      return state
+  }
+}
+
+export const getOtherUserPostsReducer = (state = { info: [] }, action) => {
   switch (action.type) {
     case GET_OTHER_USER_POSTS_REQUEST:
-      return { loading: true, posts: [] }
+      return { loading: true, info: [] }
     case GET_OTHER_USER_POSTS_SUCCESS:
-      return { loading: false, posts: action.payload }
+      return { loading: false, info: action.payload }
     case GET_OTHER_USER_POSTS_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, info: [], error: action.payload }
     default:
       return state
   }

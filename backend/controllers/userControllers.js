@@ -49,6 +49,8 @@ const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      followers: user.followers,
+      following: user.following,
       token: generateToken(user._id),
     })
   } else {
@@ -82,7 +84,11 @@ const getUserById = asyncHandler(async (req, res) => {
   if (postOfUser.length !== 0) {
     res.json({ user, postOfUser })
   } else {
-    res.json({ user, message: 'This user has not posted anything yet' })
+    res.json({
+      user,
+      postOfUser,
+      message: 'This user has not posted anything yet',
+    })
   }
 })
 

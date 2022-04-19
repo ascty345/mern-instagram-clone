@@ -16,6 +16,9 @@ const ProfileScreen = () => {
   const myPosts = useSelector((state) => state.myPosts)
   const { loading, error, posts } = myPosts
 
+  const userLoginFollow = useSelector((state) => state.userLoginFollow)
+  const { followers, following } = userLoginFollow
+
   useEffect(() => {
     if (!userInfo) {
       navigate('/signin')
@@ -38,7 +41,10 @@ const ProfileScreen = () => {
         </Col>
         <Col xs={9}>
           {userInfo && <h1>{userInfo.name}</h1>}
-          <div>40 posts 40 followers 40 following</div>
+          <div>
+            {posts.length} posts {followers.length} followers {following.length}{' '}
+            following
+          </div>
         </Col>
       </Row>
       <hr />

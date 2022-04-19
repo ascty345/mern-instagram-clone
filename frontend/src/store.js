@@ -4,6 +4,7 @@ import { composeWithDevTools } from '@redux-devtools/extension'
 import {
   userRegisterReducer,
   userLoginReducer,
+  userLoginFollowReducer,
   getOtherUserPostsReducer,
 } from './reducers/userReducers'
 import {
@@ -15,6 +16,7 @@ import {
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
+  userLoginFollow: userLoginFollowReducer,
   postSubmit: postSubmitReducer,
   postList: postListReducer,
   myPosts: myPostReducer,
@@ -27,6 +29,10 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
 
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
+  userLoginFollow: {
+    followers: userInfoFromStorage ? userInfoFromStorage.followers : [],
+    following: userInfoFromStorage ? userInfoFromStorage.following : [],
+  },
 }
 
 const middleware = [thunk]
