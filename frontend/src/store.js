@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
+import { checkTokenExpirationMiddleware } from './reduxMiddleware/checkTokenExpirationMiddleware'
 import { composeWithDevTools } from '@redux-devtools/extension'
 import {
   userRegisterReducer,
@@ -35,7 +36,7 @@ const initialState = {
   },
 }
 
-const middleware = [thunk]
+const middleware = [thunk, checkTokenExpirationMiddleware]
 
 const store = createStore(
   reducer,
