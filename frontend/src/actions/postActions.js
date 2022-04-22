@@ -12,6 +12,9 @@ import {
   POST_UPDATE_LIKES,
   POST_ADD_COMMENTS,
   POST_DELETE,
+  FOLLOWING_POST_LIST_REQUEST,
+  FOLLOWING_POST_LIST_SUCCESS,
+  FOLLOWING_POST_LIST_FAIL,
 } from '../constants/postConstants'
 
 export const postUpload = (formData) => async (dispatch, getState) => {
@@ -68,6 +71,34 @@ export const listPost = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: POST_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const followingListPost = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: FOLLOWING_POST_LIST_REQUEST })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get('/api/posts/following', config)
+
+    dispatch({ type: FOLLOWING_POST_LIST_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: FOLLOWING_POST_LIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -14,6 +14,10 @@ import {
   POST_UPDATE_LIKES,
   POST_ADD_COMMENTS,
   POST_DELETE,
+  FOLLOWING_POST_LIST_REQUEST,
+  FOLLOWING_POST_LIST_SUCCESS,
+  FOLLOWING_POST_LIST_FAIL,
+  FOLLOWING_POST_LIST_RESET,
 } from '../constants/postConstants'
 
 export const postSubmitReducer = (state = {}, action) => {
@@ -69,6 +73,50 @@ export const postListReducer = (state = { posts: [] }, action) => {
         loading: false,
       }
     case POST_LIST_RESET:
+      return { posts: [] }
+    default:
+      return state
+  }
+}
+
+export const followingPostListReducer = (state = { posts: [] }, action) => {
+  switch (action.type) {
+    case FOLLOWING_POST_LIST_REQUEST:
+      return { loading: true, posts: [] }
+    case FOLLOWING_POST_LIST_SUCCESS:
+      return { loading: false, posts: action.payload }
+    case FOLLOWING_POST_LIST_FAIL:
+      return { loading: false, error: action.payload }
+    case POST_UPDATE_LIKES:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload.postId
+            ? { ...post, likes: action.payload.likes }
+            : post
+        ),
+        loading: false,
+      }
+    case POST_ADD_COMMENTS:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload.postId
+            ? { ...post, comments: action.payload.comments }
+            : post
+        ),
+        loading: false,
+      }
+    case POST_DELETE:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload.postId ? { ...post, deleted: true } : post
+        ),
+        deleteConfirm: action.payload.message,
+        loading: false,
+      }
+    case FOLLOWING_POST_LIST_RESET:
       return { posts: [] }
     default:
       return state
