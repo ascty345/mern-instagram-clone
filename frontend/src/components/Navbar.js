@@ -19,7 +19,7 @@ const Header = () => {
       <Navbar bg='light' expand='lg' fixed='top'>
         <Container>
           <Navbar.Brand as={Link} to='/' className='brand-logo'>
-            Instagram
+            Instagram-Clone
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse

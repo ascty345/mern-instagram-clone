@@ -83,15 +83,6 @@ const HomeScreen = () => {
               <Card.Header className='bg-white fw-bold'>
                 <Row>
                   <Col>
-                    <Image
-                      className='rounded-circle pull-left me-1'
-                      style={{ maxWidth: '1.75rem' }}
-                      variant='top'
-                      src={userInfo.profilePic.replace(
-                        /upload\//g,
-                        'upload/c_fill,h_500,w_500/r_max/'
-                      )}
-                    />
                     <Link
                       to={
                         post.postedBy._id !== userInfo._id
@@ -99,6 +90,15 @@ const HomeScreen = () => {
                           : `/profile`
                       }
                       style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <Image
+                        className='rounded-circle pull-left me-1'
+                        style={{ maxWidth: '1.75rem' }}
+                        variant='top'
+                        src={userInfo.profilePic.replace(
+                          /upload\//g,
+                          'upload/c_fill,h_500,w_500/r_max/'
+                        )}
+                      />
                       {post.postedBy.name}
                     </Link>
                   </Col>
