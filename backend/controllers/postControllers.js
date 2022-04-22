@@ -34,7 +34,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({})
     .populate({
       path: 'comments.user',
-      select: 'name _id',
+      select: 'name profilePic _id',
     })
     .populate({
       path: 'postedBy',
@@ -42,6 +42,29 @@ const getAllPosts = asyncHandler(async (req, res) => {
     })
     .sort({ updatedAt: -1 })
   res.json(posts)
+})
+
+// @desc   Fetch a single post by id
+// @route  GET /api/posts/:id
+// @access Private
+
+const getSinglePost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id)
+    .populate({
+      path: 'comments.user',
+      select: 'name profilePic _id',
+    })
+    .populate({
+      path: 'postedBy',
+      select: 'name profilePic email',
+    })
+
+  if (!post) {
+    res.status(404)
+    throw new Error('Post not found')
+  }
+
+  res.json(post)
 })
 
 // @desc   Get logged in user post
@@ -64,11 +87,11 @@ const getFollowingPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({ postedBy: { $in: req.user.following } })
     .populate({
       path: 'comments.user',
-      select: 'name _id',
+      select: 'name profilePic _id',
     })
     .populate({
       path: 'postedBy',
-      select: 'name email',
+      select: 'name profilePic email',
     })
     .sort({ updatedAt: -1 })
   res.json(posts)
@@ -80,6 +103,11 @@ const getFollowingPosts = asyncHandler(async (req, res) => {
 
 const likePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id)
+
+  if (!post) {
+    res.status(404)
+    throw new Error('Post not found')
+  }
 
   // Check if the post has already been liked
   if (
@@ -101,6 +129,11 @@ const likePost = asyncHandler(async (req, res) => {
 
 const unLikePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id)
+
+  if (!post) {
+    res.status(404)
+    throw new Error('Post not found')
+  }
 
   // Check if the post has already been liked
   if (
@@ -128,13 +161,18 @@ const unLikePost = asyncHandler(async (req, res) => {
 const commentPost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id)
 
+  if (!post) {
+    res.status(404)
+    throw new Error('Post not found')
+  }
+
   post.comments.unshift({ user: req.user.id, comment: req.body.comment })
 
   await post.save()
 
   const commentedPost = await Post.findById(req.params.id).populate({
     path: 'comments.user',
-    select: 'name _id',
+    select: 'name profilePic _id',
   })
   res.json(commentedPost.comments)
 })
@@ -167,6 +205,7 @@ const deletePost = asyncHandler(async (req, res) => {
 export {
   createPost,
   getAllPosts,
+  getSinglePost,
   getMyPosts,
   getFollowingPosts,
   likePost,

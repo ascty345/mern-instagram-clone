@@ -57,9 +57,12 @@ const ProfileOfOtherUserScreen = () => {
             <Col xs={3}>
               <Card className='border-0' style={{ maxWidth: '12rem' }}>
                 <Card.Img
-                  className='rounded-circle pull-left'
+                  className='img-thumbnail rounded-circle pull-left'
                   variant='top'
-                  src='https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80'
+                  src={info.user.profilePic.replace(
+                    /upload\//g,
+                    'upload/c_fill,h_500,w_500/r_max/'
+                  )}
                 />
               </Card>
             </Col>

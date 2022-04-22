@@ -3,6 +3,7 @@ import {
   FOLLOWING_POST_LIST_RESET,
   MY_POST_RESET,
   POST_LIST_RESET,
+  SINGLE_POST_LIST_RESET,
 } from '../constants/postConstants'
 import {
   USER_REGISTER_REQUEST,
@@ -153,6 +154,7 @@ export const logout = () => (dispatch) => {
   dispatch({ type: USER_LOGOUT })
   dispatch({ type: USER_REGISTER_RESET })
   dispatch({ type: POST_LIST_RESET })
+  dispatch({ type: SINGLE_POST_LIST_RESET })
   dispatch({ type: FOLLOWING_POST_LIST_RESET })
   dispatch({ type: MY_POST_RESET })
   dispatch({ type: FOLLOW_RESET })

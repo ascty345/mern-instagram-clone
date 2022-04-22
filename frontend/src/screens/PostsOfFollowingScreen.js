@@ -1,23 +1,13 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
-import {
-  Card,
-  Container,
-  Button,
-  Form,
-  Stack,
-  Row,
-  ListGroup,
-  Col,
-} from 'react-bootstrap'
+import { Card, Container, Row, Col, Image } from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import {
   followingListPost,
   likePost,
   unLikePost,
-  commentPost,
   deletePost,
 } from '../actions/postActions'
 
@@ -41,10 +31,6 @@ const PostsOfFollowingScreen = () => {
 
   const deletePostHandler = (postId, photoId) => {
     dispatch(deletePost(postId, photoId))
-  }
-
-  const submitCommentHandler = (postId, comment) => {
-    dispatch(commentPost(postId, comment))
   }
 
   useEffect(() => {
@@ -89,6 +75,15 @@ const PostsOfFollowingScreen = () => {
                           : `/profile`
                       }
                       style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <Image
+                        className='rounded-circle pull-left me-1'
+                        style={{ maxWidth: '1.75rem' }}
+                        variant='top'
+                        src={post.postedBy.profilePic.replace(
+                          /upload\//g,
+                          'upload/c_fill,h_500,w_500/r_max/'
+                        )}
+                      />
                       {post.postedBy.name}
                     </Link>
                   </Col>
@@ -136,38 +131,11 @@ const PostsOfFollowingScreen = () => {
                 {post.likes.length} likes
                 <Card.Title className='fs-5'>{post.title}</Card.Title>
                 <Card.Text>{post.body}</Card.Text>
-                <ListGroup className='mb-3 list-group-flush'>
-                  {post.comments.map((comment) => (
-                    <ListGroup.Item key={comment._id}>
-                      <span className='fs-9 fw-bold'>
-                        {comment.user.name}:{' '}
-                      </span>
-                      {comment.comment}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-                <Form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    submitCommentHandler(post._id, e.target[0].value)
-                    e.target[0].value = ''
-                  }}>
-                  <Form.Group controlId='comment'>
-                    <Stack direction='horizontal' gap={3}>
-                      <Form.Control
-                        className='border-0'
-                        placeholder='Enter your comment here'
-                      />
-                      <Button
-                        className='btn bg-transparent'
-                        variant='light'
-                        type='submit'>
-                        {' '}
-                        <i className='fa-regular fa-paper-plane'></i>
-                      </Button>
-                    </Stack>
-                  </Form.Group>
-                </Form>
+                <Link
+                  to={`/post/${post._id}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}>
+                  View all {post.comments.length} comments
+                </Link>
               </Card.Body>
             </Card>
           )

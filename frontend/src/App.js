@@ -9,6 +9,7 @@ import SigninScreen from './screens/SigninScreen'
 import SignupScreen from './screens/SignupScreen'
 import CreatePostScreen from './screens/CreatePostScreen'
 import UserUpdateScreen from './screens/UserUpdateScreen'
+import SinglePostScreen from './screens/SinglePostScreen'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               />
               <Route path='/profile/settings' element={<UserUpdateScreen />} />
               <Route path='/createPost' element={<CreatePostScreen />} />
+              <Route path='/post/:id' element={<SinglePostScreen />} />
             </Routes>
           </Container>
         </main>

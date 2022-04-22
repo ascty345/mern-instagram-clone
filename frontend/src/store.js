@@ -13,6 +13,7 @@ import {
 import {
   postSubmitReducer,
   postListReducer,
+  postSingleReducer,
   followingPostListReducer,
   myPostReducer,
 } from './reducers/postReducers'
@@ -25,6 +26,7 @@ const reducer = combineReducers({
   tokenExpired: tokenExpiredReducer,
   postSubmit: postSubmitReducer,
   postList: postListReducer,
+  postSingle: postSingleReducer,
   followingPostList: followingPostListReducer,
   myPosts: myPostReducer,
   getOtherUserPosts: getOtherUserPostsReducer,

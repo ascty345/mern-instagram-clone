@@ -1,25 +1,37 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, Link } from 'react-router-dom'
-import { Card, Container, Row, Col, Image } from 'react-bootstrap'
+import { useNavigate, Link, useParams } from 'react-router-dom'
+import {
+  Card,
+  Container,
+  Button,
+  Form,
+  Stack,
+  Row,
+  ListGroup,
+  Col,
+  Image,
+} from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import {
-  listPost,
+  listSinglePost,
   likePost,
   unLikePost,
+  commentPost,
   deletePost,
 } from '../actions/postActions'
 
-const HomeScreen = () => {
+const SinglePostScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const params = useParams()
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-  const postList = useSelector((state) => state.postList)
-  const { loading, error, posts, deleteConfirm } = postList
+  const postSingle = useSelector((state) => state.postSingle)
+  const { loading, error, posts, deleteConfirm } = postSingle
 
   const likePostHandler = (postId) => {
     dispatch(likePost(postId))
@@ -33,13 +45,17 @@ const HomeScreen = () => {
     dispatch(deletePost(postId, photoId))
   }
 
+  const submitCommentHandler = (postId, comment) => {
+    dispatch(commentPost(postId, comment))
+  }
+
   useEffect(() => {
     if (!userInfo) {
       navigate('/signin')
     } else {
-      dispatch(listPost())
+      dispatch(listSinglePost(params.id))
     }
-  }, [navigate, dispatch, userInfo])
+  }, [navigate, dispatch, userInfo, params.id])
 
   return (
     <Container className='my-3'>
@@ -49,7 +65,7 @@ const HomeScreen = () => {
         </Row>
       ) : error ? (
         <Message variant='danger'>{error}</Message>
-      ) : (
+      ) : posts ? (
         posts.map((post) =>
           post.deleted ? (
             deleteConfirm && (
@@ -77,7 +93,7 @@ const HomeScreen = () => {
                       style={{ textDecoration: 'none', color: 'inherit' }}>
                       <Image
                         className='rounded-circle pull-left me-1'
-                        style={{ maxWidth: '1.75rem' }}
+                        style={{ maxWidth: '3rem' }}
                         variant='top'
                         src={post.postedBy.profilePic.replace(
                           /upload\//g,
@@ -133,18 +149,60 @@ const HomeScreen = () => {
                 {post.likes.length} likes
                 <Card.Title className='fs-5'>{post.title}</Card.Title>
                 <Card.Text>{post.body}</Card.Text>
-                <Link
-                  to={`/post/${post._id}`}
-                  style={{ textDecoration: 'none', color: 'inherit' }}>
-                  View all {post.comments.length} comments
-                </Link>
+                <ListGroup className='mb-3 list-group-flush'>
+                  {post.comments.map((comment) => (
+                    <ListGroup.Item key={comment._id}>
+                      <Link
+                        to={`/profile/${comment.user._id}`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <Image
+                          className='rounded-circle pull-left me-1'
+                          style={{ maxWidth: '2rem' }}
+                          variant='top'
+                          src={comment.user.profilePic.replace(
+                            /upload\//g,
+                            'upload/c_fill,h_500,w_500/r_max/'
+                          )}
+                        />
+                        <span className='fs-9 fw-bold'>
+                          {comment.user.name}:{' '}
+                        </span>
+                        {comment.comment}
+                      </Link>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    submitCommentHandler(post._id, e.target[0].value)
+                    e.target[0].value = ''
+                  }}>
+                  <Form.Group controlId='comment'>
+                    <Stack direction='horizontal' gap={3}>
+                      <Form.Control
+                        className='border-0'
+                        placeholder='Enter your comment here'
+                      />
+                      <Button
+                        className='btn bg-transparent'
+                        variant='light'
+                        type='submit'>
+                        {' '}
+                        <i className='fa-regular fa-paper-plane'></i>
+                      </Button>
+                    </Stack>
+                  </Form.Group>
+                </Form>
               </Card.Body>
             </Card>
           )
         )
+      ) : (
+        <></>
       )}
     </Container>
   )
 }
 
-export default HomeScreen
+export default SinglePostScreen

@@ -70,15 +70,17 @@ const ProfileScreen = () => {
         <Row>
           {posts.map((post) => (
             <Col key={post._id} className='mb-3' xs={12} md={6} lg={4}>
-              <Card className='border-0' style={{ maxWidth: '30rem' }}>
-                <Card.Img
-                  variant='top'
-                  src={post.photo.replace(
-                    /upload\//g,
-                    'upload/c_fill,w_500,h_500/'
-                  )}
-                />
-              </Card>
+              <Link to={`/post/${post._id}`}>
+                <Card className='border-0' style={{ maxWidth: '30rem' }}>
+                  <Card.Img
+                    variant='top'
+                    src={post.photo.replace(
+                      /upload\//g,
+                      'upload/c_fill,w_500,h_500/'
+                    )}
+                  />
+                </Card>
+              </Link>
             </Col>
           ))}
         </Row>

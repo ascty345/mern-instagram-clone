@@ -4,6 +4,7 @@ import { protect } from '../middlewares/authMiddleware.js'
 import {
   createPost,
   getAllPosts,
+  getSinglePost,
   getFollowingPosts,
   getMyPosts,
   likePost,
@@ -18,6 +19,7 @@ const upload = multer({ storage: postStorage })
 
 router.post('/createPost', protect, upload.single('photo'), createPost)
 router.get('/allPosts', protect, getAllPosts)
+router.get('/singlePost/:id', protect, getSinglePost)
 router.get('/following', protect, getFollowingPosts)
 router.get('/myPosts', protect, getMyPosts)
 router.put('/:id/likePost', protect, likePost)

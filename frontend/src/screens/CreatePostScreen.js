@@ -80,6 +80,7 @@ const CreatePostScreen = () => {
             <Form.Group className='mb-2' controlId='image'>
               <Form.Label>Upload Image</Form.Label>
               <Form.Control
+                required
                 type='file'
                 onChange={(e) => setImage(e.target.files[0])}
               />
