@@ -47,6 +47,8 @@ const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
 
   const user = await User.findOne({ email })
+    .populate({ path: 'followers', select: 'name profilePic email _id' })
+    .populate({ path: 'following', select: 'name profilePic email _id' })
 
   if (user && (await user.matchPassword(password))) {
     res.json({
@@ -109,7 +111,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @route  GET /api/users/:id
 // @access Private
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password')
+  const user = await User.findById(req.params.id)
+    .select('-password')
+    .populate({ path: 'followers', select: 'name profilePic email _id' })
+    .populate({ path: 'following', select: 'name profilePic email _id' })
 
   if (!user) {
     res.status(404)

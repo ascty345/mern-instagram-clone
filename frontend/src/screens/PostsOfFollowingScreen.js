@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
-import { Card, Container, Row, Col, Image } from 'react-bootstrap'
+import { Card, Container, Row, Col, Image, ListGroup } from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import Modal from '../components/Modal'
 import {
   followingListPost,
   likePost,
@@ -106,16 +107,18 @@ const PostsOfFollowingScreen = () => {
                   )}
                 </Row>
               </Card.Header>
-              <Card.Img
-                variant='top'
-                src={post.photo.replace(
-                  /upload\//g,
-                  'upload/c_fit,w_500,h_500/'
-                )}
-              />
+              <Link to={`/post/${post._id}`}>
+                <Card.Img
+                  variant='top'
+                  src={post.photo.replace(
+                    /upload\//g,
+                    'upload/c_fit,w_500,h_500/'
+                  )}
+                />
+              </Link>
               <Card.Body>
                 {post.likes.filter(
-                  (like) => like.user.toString() === userInfo._id
+                  (like) => like.user._id.toString() === userInfo._id
                 ).length > 0 ? (
                   <i
                     onClick={unLikePostHandler.bind(null, post._id)}
@@ -128,7 +131,43 @@ const PostsOfFollowingScreen = () => {
                     className='fa-regular fa-heart'
                   />
                 )}{' '}
-                {post.likes.length} likes
+                <Modal
+                  trigger={
+                    <span style={{ cursor: 'pointer' }}>
+                      {post.likes.length} likes
+                    </span>
+                  }>
+                  <Card>
+                    <Card.Title className='mx-auto bg-white fw-bold'>
+                      Likes
+                    </Card.Title>
+                    <ListGroup className='mb-3 list-group-flush'>
+                      {post.likes.map((like) => (
+                        <ListGroup.Item key={like._id}>
+                          <Link
+                            to={`/profile/${like.user._id}`}
+                            style={{
+                              textDecoration: 'none',
+                              color: 'inherit',
+                            }}>
+                            <Image
+                              className='rounded-circle pull-left me-1'
+                              style={{ maxWidth: '2rem' }}
+                              variant='top'
+                              src={like.user.profilePic.replace(
+                                /upload\//g,
+                                'upload/c_fill,h_500,w_500/r_max/'
+                              )}
+                            />
+                            <span className='fs-9 fw-bold'>
+                              {like.user.name}
+                            </span>
+                          </Link>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Card>
+                </Modal>
                 <Card.Title className='fs-5'>{post.title}</Card.Title>
                 <Card.Text>{post.body}</Card.Text>
                 <Link

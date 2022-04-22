@@ -37,6 +37,10 @@ const getAllPosts = asyncHandler(async (req, res) => {
       select: 'name profilePic _id',
     })
     .populate({
+      path: 'likes.user',
+      select: 'name profilePic email _id',
+    })
+    .populate({
       path: 'postedBy',
       select: 'name profilePic email',
     })
@@ -53,6 +57,10 @@ const getSinglePost = asyncHandler(async (req, res) => {
     .populate({
       path: 'comments.user',
       select: 'name profilePic _id',
+    })
+    .populate({
+      path: 'likes.user',
+      select: 'name profilePic email _id',
     })
     .populate({
       path: 'postedBy',
@@ -90,6 +98,10 @@ const getFollowingPosts = asyncHandler(async (req, res) => {
       select: 'name profilePic _id',
     })
     .populate({
+      path: 'likes.user',
+      select: 'name profilePic email _id',
+    })
+    .populate({
       path: 'postedBy',
       select: 'name profilePic email',
     })
@@ -102,7 +114,10 @@ const getFollowingPosts = asyncHandler(async (req, res) => {
 // @access Private
 
 const likePost = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.id)
+  const post = await Post.findById(req.params.id).populate({
+    path: 'likes.user',
+    select: 'name profilePic email _id',
+  })
 
   if (!post) {
     res.status(404)
@@ -117,10 +132,15 @@ const likePost = asyncHandler(async (req, res) => {
     throw new Error('You already liked the post')
   }
 
-  post.likes.unshift({ user: req.user.id })
+  post.likes.unshift({ user: req.user })
 
   await post.save()
-  res.json(post.likes)
+
+  const updatedPost = await Post.findById(req.params.id).populate({
+    path: 'likes.user',
+    select: 'name profilePic email _id',
+  })
+  res.json(updatedPost.likes)
 })
 
 // @desc   unLike a post
@@ -137,21 +157,26 @@ const unLikePost = asyncHandler(async (req, res) => {
 
   // Check if the post has already been liked
   if (
-    post.likes.filter((like) => like.user.toString() === req.user.id).length ===
-    0
+    post.likes.filter((like) => like.user._id.toString() === req.user.id)
+      .length === 0
   ) {
     res.status(400)
     throw new Error('Post has not yet been liked')
   }
   // Get remove index
   const removeIndex = post.likes
-    .map((like) => like.user.toString())
+    .map((like) => like.user._id.toString())
     .indexOf(req.user.id)
 
   post.likes.splice(removeIndex, 1)
 
   await post.save()
-  res.json(post.likes)
+
+  const updatedPost = await Post.findById(req.params.id).populate({
+    path: 'likes.user',
+    select: 'name profilePic email _id',
+  })
+  res.json(updatedPost.likes)
 })
 
 // @desc   Comment a post

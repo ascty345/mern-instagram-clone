@@ -1,9 +1,18 @@
 import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Container, Card, Row, Col, Button } from 'react-bootstrap'
+import {
+  Container,
+  Card,
+  Row,
+  Col,
+  Button,
+  ListGroup,
+  Image,
+} from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import Modal from '../components/Modal'
 import {
   listOtherUserPosts,
   followUser,
@@ -22,7 +31,7 @@ const ProfileOfOtherUserScreen = () => {
   const { loading, error, info } = getOtherUserPosts
 
   const followList = useSelector((state) => state.userLoginFollow)
-  const { following } = followList
+  const { following: userLoginFollowing } = followList
 
   const followHandler = (userFollowedId) => {
     dispatch(followUser(userFollowedId))
@@ -69,11 +78,85 @@ const ProfileOfOtherUserScreen = () => {
             <Col xs={9}>
               <h1>{info.user.name}</h1>
               <div>
-                {info.postOfUser.length} posts {info.user.followers.length}{' '}
-                followers {info.user.following.length} following
+                {info.postOfUser.length} posts {`  `}
+                <Modal
+                  trigger={
+                    <span style={{ cursor: 'pointer' }}>
+                      {info.user.followers.length} followers {`  `}
+                    </span>
+                  }>
+                  <Card>
+                    <Card.Title className='mx-auto bg-white fw-bold'>
+                      Followers
+                    </Card.Title>
+                    <ListGroup className='mb-3 list-group-flush'>
+                      {info.user.followers.map((follower) => (
+                        <ListGroup.Item key={follower._id}>
+                          <Link
+                            to={`/profile/${follower._id}`}
+                            style={{
+                              textDecoration: 'none',
+                              color: 'inherit',
+                            }}>
+                            <Image
+                              className='rounded-circle pull-left me-1'
+                              style={{ maxWidth: '2rem' }}
+                              variant='top'
+                              src={follower.profilePic.replace(
+                                /upload\//g,
+                                'upload/c_fill,h_500,w_500/r_max/'
+                              )}
+                            />
+                            <span className='fs-9 fw-bold'>
+                              {follower.name}
+                            </span>
+                          </Link>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Card>
+                </Modal>{' '}
+                <Modal
+                  trigger={
+                    <span style={{ cursor: 'pointer' }}>
+                      {info.user.following.length} following
+                    </span>
+                  }>
+                  <Card>
+                    <Card.Title className='mx-auto bg-white fw-bold'>
+                      Following
+                    </Card.Title>
+                    <ListGroup className='mb-3 list-group-flush'>
+                      {info.user.following.map((following) => (
+                        <ListGroup.Item key={following._id}>
+                          <Link
+                            to={`/profile/${following._id}`}
+                            style={{
+                              textDecoration: 'none',
+                              color: 'inherit',
+                            }}>
+                            <Image
+                              className='rounded-circle pull-left me-1'
+                              style={{ maxWidth: '2rem' }}
+                              variant='top'
+                              src={following.profilePic.replace(
+                                /upload\//g,
+                                'upload/c_fill,h_500,w_500/r_max/'
+                              )}
+                            />
+                            <span className='fs-9 fw-bold'>
+                              {following.name}
+                            </span>
+                          </Link>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Card>
+                </Modal>
               </div>
-              {following.filter((user) => user.toString() === params.id)
-                .length === 0 ? (
+              {userLoginFollowing.filter(
+                (user) => user.toString() === params.id
+              ).length === 0 ? (
                 <Button
                   onClick={followHandler.bind(null, params.id)}
                   className='ml-0 mt-2'
@@ -99,15 +182,17 @@ const ProfileOfOtherUserScreen = () => {
           <Row>
             {info.postOfUser.map((post) => (
               <Col key={post._id} className='mb-3' xs={12} md={6} lg={4}>
-                <Card className='border-0' style={{ maxWidth: '30rem' }}>
-                  <Card.Img
-                    variant='top'
-                    src={post.photo.replace(
-                      /upload\//g,
-                      'upload/c_fit,w_500,h_500/'
-                    )}
-                  />
-                </Card>
+                <Link to={`/post/${post._id}`}>
+                  <Card className='border-0' style={{ maxWidth: '30rem' }}>
+                    <Card.Img
+                      variant='top'
+                      src={post.photo.replace(
+                        /upload\//g,
+                        'upload/c_fill,w_500,h_500/'
+                      )}
+                    />
+                  </Card>
+                </Link>
               </Col>
             ))}
           </Row>

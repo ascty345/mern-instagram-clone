@@ -1,9 +1,18 @@
 import React, { useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Container, Card, Row, Col, Image, Button } from 'react-bootstrap'
+import {
+  Container,
+  Card,
+  Row,
+  Col,
+  Image,
+  Button,
+  ListGroup,
+} from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import Modal from '../components/Modal'
 import { listMyPosts } from '../actions/postActions'
 
 const ProfileScreen = () => {
@@ -53,8 +62,81 @@ const ProfileScreen = () => {
             <Col xs={9}>
               <h1>{userInfo.name}</h1>
               <div>
-                {posts.length} posts {followers.length} followers{' '}
-                {following.length} following
+                {posts.length} posts {`  `}
+                <Modal
+                  trigger={
+                    <span style={{ cursor: 'pointer' }}>
+                      {followers.length} followers {`  `}
+                    </span>
+                  }>
+                  <Card>
+                    <Card.Title className='mx-auto bg-white fw-bold'>
+                      Followers
+                    </Card.Title>
+                    <ListGroup className='mb-3 list-group-flush'>
+                      {followers.map((follower) => (
+                        <ListGroup.Item key={follower._id}>
+                          <Link
+                            to={`/profile/${follower._id}`}
+                            style={{
+                              textDecoration: 'none',
+                              color: 'inherit',
+                            }}>
+                            <Image
+                              className='rounded-circle pull-left me-1'
+                              style={{ maxWidth: '2rem' }}
+                              variant='top'
+                              src={follower.profilePic.replace(
+                                /upload\//g,
+                                'upload/c_fill,h_500,w_500/r_max/'
+                              )}
+                            />
+                            <span className='fs-9 fw-bold'>
+                              {follower.name}
+                            </span>
+                          </Link>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Card>
+                </Modal>{' '}
+                <Modal
+                  trigger={
+                    <span style={{ cursor: 'pointer' }}>
+                      {following.length} following
+                    </span>
+                  }>
+                  <Card>
+                    <Card.Title className='mx-auto bg-white fw-bold'>
+                      Following
+                    </Card.Title>
+                    <ListGroup className='mb-3 list-group-flush'>
+                      {following.map((following) => (
+                        <ListGroup.Item key={following._id}>
+                          <Link
+                            to={`/profile/${following._id}`}
+                            style={{
+                              textDecoration: 'none',
+                              color: 'inherit',
+                            }}>
+                            <Image
+                              className='rounded-circle pull-left me-1'
+                              style={{ maxWidth: '2rem' }}
+                              variant='top'
+                              src={following.profilePic.replace(
+                                /upload\//g,
+                                'upload/c_fill,h_500,w_500/r_max/'
+                              )}
+                            />
+                            <span className='fs-9 fw-bold'>
+                              {following.name}
+                            </span>
+                          </Link>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Card>
+                </Modal>
               </div>
               <Link to='settings'>
                 <Button className='ml-0 mt-2' variant='light'>
