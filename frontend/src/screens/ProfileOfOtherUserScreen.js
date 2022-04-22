@@ -24,12 +24,12 @@ const ProfileOfOtherUserScreen = () => {
   const followList = useSelector((state) => state.userLoginFollow)
   const { following } = followList
 
-  const followHandler = () => {
-    dispatch(followUser(params.id))
+  const followHandler = (userFollowedId) => {
+    dispatch(followUser(userFollowedId))
   }
 
-  const unfollowHandler = () => {
-    dispatch(unfollowUser(params.id))
+  const unfollowHandler = (userUnFollowedId) => {
+    dispatch(unfollowUser(userUnFollowedId))
   }
 
   useEffect(() => {
@@ -72,14 +72,14 @@ const ProfileOfOtherUserScreen = () => {
               {following.filter((user) => user.toString() === params.id)
                 .length === 0 ? (
                 <Button
-                  onClick={followHandler}
+                  onClick={followHandler.bind(null, params.id)}
                   className='ml-0 mt-2'
                   variant='light'>
                   Follow
                 </Button>
               ) : (
                 <Button
-                  onClick={unfollowHandler}
+                  onClick={unfollowHandler.bind(null, params.id)}
                   className='ml-0 mt-2'
                   variant='danger'>
                   Unfollow

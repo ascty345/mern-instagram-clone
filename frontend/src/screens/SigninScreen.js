@@ -17,9 +17,12 @@ const SigninScreen = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { loading, error, userInfo } = userLogin
 
+  const tokenExpired = useSelector((state) => state.tokenExpired)
+  const { message: tokenMessage } = tokenExpired
+
   useEffect(() => {
     if (userInfo) {
-      navigate('/')
+      navigate(-1)
     }
   }, [navigate, userInfo])
 
@@ -33,6 +36,9 @@ const SigninScreen = () => {
       <Card className='mt-3'>
         <Card.Body>
           <Card.Title className='text-center justify-content-center'>
+            {tokenMessage && (
+              <Message variant='warning'>{tokenMessage}</Message>
+            )}
             {error && <Message variant='danger'>{error}</Message>}
             {loading && <Loader />}
             <h2>Sign In</h2>

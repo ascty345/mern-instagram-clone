@@ -14,6 +14,8 @@ import {
   FOLLOW_REQUEST_SUCESS,
   FOLLOW_REQUEST_FAIL,
   FOLLOW_RESET,
+  TOKEN_EXPIRED,
+  TOKEN_EXPIRED_RESET,
 } from '../constants/userConstants'
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -83,6 +85,16 @@ export const getOtherUserPostsReducer = (state = { info: [] }, action) => {
       return { loading: false, info: action.payload }
     case GET_OTHER_USER_POSTS_FAIL:
       return { loading: false, info: [], error: action.payload }
+    default:
+      return state
+  }
+}
+export const tokenExpiredReducer = (state = {}, action) => {
+  switch (action.type) {
+    case TOKEN_EXPIRED:
+      return { message: 'Your session has expired, please login again' }
+    case TOKEN_EXPIRED_RESET:
+      return {}
     default:
       return state
   }

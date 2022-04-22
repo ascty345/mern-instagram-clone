@@ -6,6 +6,7 @@ import {
   userRegisterReducer,
   userLoginReducer,
   userLoginFollowReducer,
+  tokenExpiredReducer,
   getOtherUserPostsReducer,
 } from './reducers/userReducers'
 import {
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
   userLoginFollow: userLoginFollowReducer,
+  tokenExpired: tokenExpiredReducer,
   postSubmit: postSubmitReducer,
   postList: postListReducer,
   myPosts: myPostReducer,

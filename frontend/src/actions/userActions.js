@@ -16,6 +16,7 @@ import {
   FOLLOW_REQUEST_SUCESS,
   FOLLOW_REQUEST_FAIL,
   UNFOLLOW_A_USER,
+  TOKEN_EXPIRED_RESET,
 } from '../constants/userConstants'
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -92,6 +93,8 @@ export const login = (email, password) => async (dispatch) => {
         following: data.following,
       },
     })
+
+    dispatch({ type: TOKEN_EXPIRED_RESET })
 
     localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (error) {
