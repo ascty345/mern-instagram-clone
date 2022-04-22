@@ -67,7 +67,7 @@ const ProfileScreen = () => {
                   variant='top'
                   src={post.photo.replace(
                     /upload\//g,
-                    'upload/c_fit,w_500,h_500/'
+                    'upload/c_fill,w_500,h_500/'
                   )}
                 />
               </Card>

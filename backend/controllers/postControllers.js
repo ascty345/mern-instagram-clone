@@ -56,6 +56,24 @@ const getMyPosts = asyncHandler(async (req, res) => {
   res.json(posts)
 })
 
+// @desc   Fetch following posts
+// @route  GET /api/posts/following
+// @access Private
+
+const getFollowingPosts = asyncHandler(async (req, res) => {
+  const posts = await Post.find({ postedBy: { $in: req.user.following } })
+    .populate({
+      path: 'comments.user',
+      select: 'name _id',
+    })
+    .populate({
+      path: 'postedBy',
+      select: 'name email',
+    })
+    .sort({ updatedAt: -1 })
+  res.json(posts)
+})
+
 // @desc   Like a post
 // @route  PUT /api/posts/:id/likePost
 // @access Private
@@ -150,6 +168,7 @@ export {
   createPost,
   getAllPosts,
   getMyPosts,
+  getFollowingPosts,
   likePost,
   unLikePost,
   commentPost,
