@@ -38,7 +38,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
     })
     .populate({
       path: 'postedBy',
-      select: 'name email',
+      select: 'name profilePic email',
     })
     .sort({ updatedAt: -1 })
   res.json(posts)

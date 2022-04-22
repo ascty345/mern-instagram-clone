@@ -10,7 +10,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-const storage = new CloudinaryStorage({
+const postStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'instagram-clone',
@@ -18,4 +18,12 @@ const storage = new CloudinaryStorage({
   },
 })
 
-export { cloudinary, storage }
+const profileStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'instagram-clone/profile',
+    allowedFormats: ['jpeg', 'png', 'jpg'],
+  },
+})
+
+export { cloudinary, postStorage, profileStorage }

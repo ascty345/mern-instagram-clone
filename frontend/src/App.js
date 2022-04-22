@@ -8,6 +8,7 @@ import ProfileOfOtherUserScreen from './screens/ProfileOfOtherUserScreen'
 import SigninScreen from './screens/SigninScreen'
 import SignupScreen from './screens/SignupScreen'
 import CreatePostScreen from './screens/CreatePostScreen'
+import UserUpdateScreen from './screens/UserUpdateScreen'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                 path='/profile/:id'
                 element={<ProfileOfOtherUserScreen />}
               />
+              <Route path='/profile/settings' element={<UserUpdateScreen />} />
               <Route path='/createPost' element={<CreatePostScreen />} />
             </Routes>
           </Container>

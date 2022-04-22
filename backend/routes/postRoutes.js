@@ -11,10 +11,10 @@ import {
   commentPost,
   deletePost,
 } from '../controllers/postControllers.js'
-import { storage } from '../config/cloudinary.js'
+import { postStorage } from '../config/cloudinary.js'
 
 const router = express.Router()
-const upload = multer({ storage })
+const upload = multer({ storage: postStorage })
 
 router.post('/createPost', protect, upload.single('photo'), createPost)
 router.get('/allPosts', protect, getAllPosts)

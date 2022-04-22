@@ -5,6 +5,7 @@ import { composeWithDevTools } from '@redux-devtools/extension'
 import {
   userRegisterReducer,
   userLoginReducer,
+  userUpdateReducer,
   userLoginFollowReducer,
   tokenExpiredReducer,
   getOtherUserPostsReducer,
@@ -19,6 +20,7 @@ import {
 const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userLogin: userLoginReducer,
+  userUpdate: userUpdateReducer,
   userLoginFollow: userLoginFollowReducer,
   tokenExpired: tokenExpiredReducer,
   postSubmit: postSubmitReducer,

@@ -21,9 +21,13 @@ import {
   FOLLOW_REQUEST_FAIL,
   UNFOLLOW_A_USER,
   TOKEN_EXPIRED_RESET,
+  USER_REGISTER_RESET,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAIL,
 } from '../constants/userConstants'
 
-export const register = (name, email, password) => async (dispatch) => {
+export const register = (formData) => async (dispatch) => {
   try {
     dispatch({
       type: USER_REGISTER_REQUEST,
@@ -35,15 +39,7 @@ export const register = (name, email, password) => async (dispatch) => {
       },
     }
 
-    const { data } = await axios.post(
-      '/api/users/signup',
-      {
-        name,
-        email,
-        password,
-      },
-      config
-    )
+    const { data } = await axios.post('/api/users/signup', formData, config)
 
     dispatch({
       type: USER_REGISTER_SUCCESS,
@@ -59,6 +55,46 @@ export const register = (name, email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const userUpdateAction = (formData) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put('/api/users/profile', formData, config)
+
+    dispatch({
+      type: USER_UPDATE_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    })
+
+    localStorage.setItem('userInfo', JSON.stringify(data))
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -115,6 +151,7 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem('userInfo')
   dispatch({ type: USER_LOGOUT })
+  dispatch({ type: USER_REGISTER_RESET })
   dispatch({ type: POST_LIST_RESET })
   dispatch({ type: FOLLOWING_POST_LIST_RESET })
   dispatch({ type: MY_POST_RESET })

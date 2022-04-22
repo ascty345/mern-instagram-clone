@@ -1,34 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button, Card } from 'react-bootstrap'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
-import { register } from '../actions/userActions'
+import { userUpdateAction } from '../actions/userActions'
+import { USER_UPDATE_RESET } from '../constants/userConstants'
 
-const SignupScreen = () => {
+const UserUpdateScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [image, setImage] = useState('')
-  const [message, setMessage] = useState(null)
-
-  const userRegister = useSelector((state) => state.userRegister)
-  const { loading, error } = userRegister
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const [name, setName] = useState(userInfo.name)
+  const [email, setEmail] = useState(userInfo.email)
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [image, setImage] = useState(null)
+  const [message, setMessage] = useState(null)
+
+  const userUpdate = useSelector((state) => state.userUpdate)
+  const { loading, error, success } = userUpdate
+
   useEffect(() => {
-    if (userInfo) {
-      navigate('/')
+    if (!userInfo) {
+      navigate('/signin')
     }
-  }, [navigate, userInfo])
+    if (success) {
+      setMessage('Updated Successfully')
+    }
+    dispatch({ type: USER_UPDATE_RESET })
+  }, [navigate, userInfo, success, dispatch])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -38,9 +43,9 @@ const SignupScreen = () => {
       const formData = new FormData()
       formData.append('name', name)
       formData.append('email', email)
-      formData.append('password', password)
-      formData.append('photo', image)
-      dispatch(register(formData))
+      password && formData.append('password', password)
+      image && formData.append('photo', image)
+      dispatch(userUpdateAction(formData))
     }
   }
 
@@ -49,18 +54,17 @@ const SignupScreen = () => {
       <Card className='mt-3'>
         <Card.Body>
           <Card.Title className='text-center justify-content-center'>
-            {message && <Message variant='danger'>{message}</Message>}
+            {message && <Message variant='success'>{message}</Message>}
             {error && <Message variant='danger'>{error}</Message>}
             {loading && <Loader />}
-            <h2>Sign Up</h2>
+            <h2>Update Your Information</h2>
           </Card.Title>
           <Form className='mt-3' onSubmit={submitHandler}>
             <Form.Group className='mb-2' controlId='image'>
-              <Form.Label>Profile Picture</Form.Label>
+              <Form.Label>Change Profile Picture</Form.Label>
               <Form.Control
                 type='file'
                 onChange={(e) => setImage(e.target.files[0])}
-                required
               />
             </Form.Group>
 
@@ -92,7 +96,7 @@ const SignupScreen = () => {
             </Form.Group>
 
             <Form.Group className='mb-1' controlId='password'>
-              <Form.Label>Password</Form.Label>
+              <Form.Label>Change Your Password</Form.Label>
               <Form.Control
                 type='password'
                 placeholder='Password'
@@ -114,13 +118,9 @@ const SignupScreen = () => {
               />
             </Form.Group>
 
-            <Form.Group className='text-center mb-2'>
-              <Link to='/signin'>Already have an account?</Link>
-            </Form.Group>
-
             <Form.Group className='text-center'>
               <Button variant='outline-success' type='submit'>
-                Sign Up
+                Submit
               </Button>
             </Form.Group>
           </Form>
@@ -130,4 +130,4 @@ const SignupScreen = () => {
   )
 }
 
-export default SignupScreen
+export default UserUpdateScreen

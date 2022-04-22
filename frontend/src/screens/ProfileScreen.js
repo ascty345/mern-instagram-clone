@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Container, Card, Row, Col } from 'react-bootstrap'
+import { Container, Card, Row, Col, Image, Button } from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listMyPosts } from '../actions/postActions'
@@ -40,10 +40,13 @@ const ProfileScreen = () => {
           <Row>
             <Col xs={3}>
               <Card className='border-0' style={{ maxWidth: '12rem' }}>
-                <Card.Img
-                  className='rounded-circle pull-left'
+                <Image
+                  className='img-thumbnail rounded-circle z-depth-2 pull-left'
                   variant='top'
-                  src='https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80'
+                  src={userInfo.profilePic.replace(
+                    /upload\//g,
+                    'upload/c_fill,h_500,w_500/r_max/'
+                  )}
                 />
               </Card>
             </Col>
@@ -53,6 +56,11 @@ const ProfileScreen = () => {
                 {posts.length} posts {followers.length} followers{' '}
                 {following.length} following
               </div>
+              <Link to='settings'>
+                <Button className='ml-0 mt-2' variant='light'>
+                  Settings
+                </Button>
+              </Link>
             </Col>
           </Row>
           <hr />
