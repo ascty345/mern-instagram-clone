@@ -19,12 +19,16 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists')
   }
 
-  const user = await User.create({
+  await User.create({
     name,
     email,
     password,
     profilePic: photo,
   })
+
+  const user = await User.findOne({ email })
+    .populate({ path: 'followers', select: 'name profilePic email _id' })
+    .populate({ path: 'following', select: 'name profilePic email _id' })
 
   if (user) {
     res.status(201).json({
@@ -32,6 +36,8 @@ const registerUser = asyncHandler(async (req, res) => {
       profilePic: user.profilePic,
       name: user.name,
       email: user.email,
+      followers: user.followers,
+      following: user.following,
       token: generateToken(user._id),
     })
   } else {
