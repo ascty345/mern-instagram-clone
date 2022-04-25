@@ -1,5 +1,6 @@
 import express from 'express'
 import colors from 'colors'
+import path from 'path'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
 
@@ -25,9 +26,19 @@ app.use(express.json())
 app.use('/api/users', userRoutes)
 app.use('/api/posts', postRoutes)
 
-app.get('/', (req, res) => {
-  res.send('Hello World')
-})
+const __dirname = path.resolve()
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  )
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running...')
+  })
+}
 
 app.use(notFound)
 app.use(errorHandler)
