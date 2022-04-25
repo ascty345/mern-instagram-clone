@@ -251,6 +251,41 @@ const searchUsers = asyncHandler(async (req, res) => {
   res.json(users)
 })
 
+// @desc   Delete users
+// @route  DELETE /api/users
+// @access Private
+
+const deleteUser = asyncHandler(async (req, res) => {
+  // Remove post images from cloudinary
+  const posts = await Post.find({ postedBy: req.user._id }, ['photo'])
+  const photosId = await posts.map((post) =>
+    post.photo.substring(
+      post.photo.indexOf('instagram-clone/'),
+      post.photo.indexOf('.jpg')
+    )
+  )
+  await cloudinary.api.delete_resources(photosId)
+
+  // Remove user's profile image from cloudinary
+  const user = await User.findById(req.user._id)
+  const profilePicId = await user.profilePic.substring(
+    user.profilePic.indexOf('instagram-clone/profile/'),
+    user.profilePic.indexOf('.jpg')
+  )
+  await cloudinary.uploader.destroy(profilePicId)
+
+  // Remove user's posts
+  await Post.deleteMany({ postedBy: req.user.id })
+  // Remove comments
+  await Post.updateMany({}, { $pull: { comments: { user: req.user.id } } })
+  // Remove likes
+  await Post.updateMany({}, { $pull: { likes: { user: req.user.id } } })
+  // Remove user
+  await User.findOneAndRemove({ _id: req.user.id })
+
+  res.json({ msg: 'User and Profile Deleted' })
+})
+
 export {
   registerUser,
   authUser,
@@ -259,4 +294,5 @@ export {
   follow,
   unfollow,
   searchUsers,
+  deleteUser,
 }
