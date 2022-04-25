@@ -181,7 +181,17 @@ const follow = asyncHandler(async (req, res) => {
   userToFollow.followers.unshift(req.user.id)
   await userToFollow.save()
 
-  res.json(user)
+  const updatedUser = await User.findById(req.user._id)
+    .select('-password')
+    .populate({ path: 'followers', select: 'name profilePic email _id' })
+    .populate({ path: 'following', select: 'name profilePic email _id' })
+
+  const updatedUserToFollow = await User.findById(req.body.userToFollowId)
+    .select('-password')
+    .populate({ path: 'followers', select: 'name profilePic email _id' })
+    .populate({ path: 'following', select: 'name profilePic email _id' })
+
+  res.json({ updatedUserToFollow, updatedUser })
 })
 
 // @desc   UnFollow a user
@@ -227,7 +237,17 @@ const unfollow = asyncHandler(async (req, res) => {
     $pull: { followers: req.user._id },
   })
 
-  res.json(user)
+  const updatedUser = await User.findById(req.user._id)
+    .select('-password')
+    .populate({ path: 'followers', select: 'name profilePic email _id' })
+    .populate({ path: 'following', select: 'name profilePic email _id' })
+
+  const updatedUserToUnFollow = await User.findById(req.body.userToUnFollowId)
+    .select('-password')
+    .populate({ path: 'followers', select: 'name profilePic email _id' })
+    .populate({ path: 'following', select: 'name profilePic email _id' })
+
+  res.json({ updatedUserToUnFollow, updatedUser })
 })
 
 // @desc   Search users

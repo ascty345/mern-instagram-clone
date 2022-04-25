@@ -28,6 +28,7 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
+  GET_OTHER_USER_POSTS_RESET,
 } from '../constants/userConstants'
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -121,8 +122,12 @@ export const userLoginFollowReducer = (
     case FOLLOW_REQUEST_SUCESS:
       return {
         loading: false,
-        followers: action.payload.followers,
-        following: action.payload.following,
+        followers: action.payload.updatedUser.followers
+          ? action.payload.updatedUser.followers
+          : [],
+        following: action.payload.updatedUser.following
+          ? action.payload.updatedUser.following
+          : [],
       }
     case FOLLOW_REQUEST_FAIL:
       return {
@@ -145,6 +150,8 @@ export const getOtherUserPostsReducer = (state = { info: [] }, action) => {
       return { loading: false, info: action.payload }
     case GET_OTHER_USER_POSTS_FAIL:
       return { loading: false, info: [], error: action.payload }
+    case GET_OTHER_USER_POSTS_RESET:
+      return { info: [] }
     default:
       return state
   }

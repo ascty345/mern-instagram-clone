@@ -33,6 +33,7 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
+  GET_OTHER_USER_POSTS_RESET,
 } from '../constants/userConstants'
 
 export const register = (formData) => async (dispatch) => {
@@ -247,6 +248,7 @@ export const logout = () => (dispatch) => {
   dispatch({ type: MY_POST_RESET })
   dispatch({ type: FOLLOW_RESET })
   dispatch({ type: USER_SEARCH_RESET })
+  dispatch({ type: GET_OTHER_USER_POSTS_RESET })
 }
 
 export const listOtherUserPosts = (userId) => async (dispatch, getState) => {

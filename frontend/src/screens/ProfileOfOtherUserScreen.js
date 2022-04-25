@@ -31,7 +31,6 @@ const ProfileOfOtherUserScreen = () => {
   const { loading, error, info } = getOtherUserPosts
 
   const followList = useSelector((state) => state.userLoginFollow)
-  const { following: userLoginFollowing } = followList
 
   const followHandler = (userFollowedId) => {
     dispatch(followUser(userFollowedId))
@@ -49,7 +48,7 @@ const ProfileOfOtherUserScreen = () => {
     } else {
       dispatch(listOtherUserPosts(params.id))
     }
-  }, [dispatch, navigate, userInfo, params.id])
+  }, [dispatch, navigate, userInfo, params.id, followList])
 
   return (
     <Container className='mt-3'>
@@ -154,8 +153,8 @@ const ProfileOfOtherUserScreen = () => {
                   </Card>
                 </Modal>
               </div>
-              {userLoginFollowing.filter(
-                (user) => user.toString() === params.id
+              {info.user.followers.filter(
+                (follower) => follower._id.toString() === userInfo._id
               ).length === 0 ? (
                 <Button
                   onClick={followHandler.bind(null, params.id)}
