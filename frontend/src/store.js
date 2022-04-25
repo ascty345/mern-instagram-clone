@@ -43,8 +43,14 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
   userLoginFollow: {
-    followers: userInfoFromStorage ? userInfoFromStorage.followers : [],
-    following: userInfoFromStorage ? userInfoFromStorage.following : [],
+    followers:
+      userInfoFromStorage && userInfoFromStorage.followers
+        ? userInfoFromStorage.followers
+        : [],
+    following:
+      userInfoFromStorage && userInfoFromStorage.following
+        ? userInfoFromStorage.following
+        : [],
   },
 }
 
