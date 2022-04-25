@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Button, Card } from 'react-bootstrap'
+import { Form, Button, Card, Row, Stack } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import Modal from '../components/Modal'
 import FormContainer from '../components/FormContainer'
-import { userUpdateAction } from '../actions/userActions'
+import { userUpdateAction, userDelete } from '../actions/userActions'
 import { USER_UPDATE_RESET } from '../constants/userConstants'
 
 const UserUpdateScreen = () => {
@@ -14,13 +15,6 @@ const UserUpdateScreen = () => {
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
-
-  const [name, setName] = useState(userInfo.name)
-  const [email, setEmail] = useState(userInfo.email)
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [image, setImage] = useState(null)
-  const [message, setMessage] = useState(null)
 
   const userUpdate = useSelector((state) => state.userUpdate)
   const { loading, error, success } = userUpdate
@@ -35,6 +29,13 @@ const UserUpdateScreen = () => {
     dispatch({ type: USER_UPDATE_RESET })
   }, [navigate, userInfo, success, dispatch])
 
+  const [name, setName] = useState(userInfo ? userInfo.name : '')
+  const [email, setEmail] = useState(userInfo ? userInfo.email : '')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [image, setImage] = useState(null)
+  const [message, setMessage] = useState(null)
+
   const submitHandler = (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
@@ -47,6 +48,10 @@ const UserUpdateScreen = () => {
       image && formData.append('photo', image)
       dispatch(userUpdateAction(formData))
     }
+  }
+
+  const deleteUserHandler = () => {
+    dispatch(userDelete())
   }
 
   return (
@@ -124,6 +129,36 @@ const UserUpdateScreen = () => {
               </Button>
             </Form.Group>
           </Form>
+          <Row className='justify-content-center mt-1'>
+            <Modal
+              trigger={<Button variant='danger'>Delete your account</Button>}>
+              {(close) => (
+                <Card>
+                  <Card.Header as='h5'>Warning</Card.Header>
+                  <Card.Body>
+                    <Card.Title>There is no turning back</Card.Title>
+                    <Card.Text>
+                      All of your posts, profile images, likes and comments are
+                      also deleted. The process is irreversible
+                    </Card.Text>
+                    <Stack direction='horizontal' gap={3}>
+                      <Button onClick={deleteUserHandler} variant='danger'>
+                        Continue
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          close()
+                        }}
+                        className='ml-4'
+                        variant='info'>
+                        Get me back
+                      </Button>
+                    </Stack>
+                  </Card.Body>
+                </Card>
+              )}
+            </Modal>
+          </Row>
         </Card.Body>
       </Card>
     </FormContainer>

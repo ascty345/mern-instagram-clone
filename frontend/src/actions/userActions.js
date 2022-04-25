@@ -30,6 +30,9 @@ import {
   USER_SEARCH_SUCCESS,
   USER_SEARCH_FAIL,
   USER_SEARCH_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAIL,
 } from '../constants/userConstants'
 
 export const register = (formData) => async (dispatch) => {
@@ -100,6 +103,49 @@ export const userUpdateAction = (formData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const userDelete = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_DELETE_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.delete('/api/users/', config)
+
+    dispatch({
+      type: USER_DELETE_SUCCESS,
+      payload: data,
+    })
+
+    localStorage.removeItem('userInfo')
+    dispatch({ type: USER_LOGOUT })
+    dispatch({ type: USER_REGISTER_RESET })
+    dispatch({ type: POST_LIST_RESET })
+    dispatch({ type: SINGLE_POST_LIST_RESET })
+    dispatch({ type: FOLLOWING_POST_LIST_RESET })
+    dispatch({ type: MY_POST_RESET })
+    dispatch({ type: FOLLOW_RESET })
+    dispatch({ type: USER_SEARCH_RESET })
+  } catch (error) {
+    dispatch({
+      type: USER_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

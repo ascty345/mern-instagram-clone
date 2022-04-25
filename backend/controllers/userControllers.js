@@ -258,13 +258,16 @@ const searchUsers = asyncHandler(async (req, res) => {
 const deleteUser = asyncHandler(async (req, res) => {
   // Remove post images from cloudinary
   const posts = await Post.find({ postedBy: req.user._id }, ['photo'])
-  const photosId = await posts.map((post) =>
-    post.photo.substring(
-      post.photo.indexOf('instagram-clone/'),
-      post.photo.indexOf('.jpg')
+
+  if (posts.length !== 0) {
+    const photosId = await posts.map((post) =>
+      post.photo.substring(
+        post.photo.indexOf('instagram-clone/'),
+        post.photo.indexOf('.jpg')
+      )
     )
-  )
-  await cloudinary.api.delete_resources(photosId)
+    await cloudinary.api.delete_resources(photosId)
+  }
 
   // Remove user's profile image from cloudinary
   const user = await User.findById(req.user._id)
