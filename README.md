@@ -2,7 +2,7 @@
 I build a small version of instagram with basic features using MERN stack
 
 In this project, I build a small version of instagram with basic features using MERN stack. This app contains several features such as 
-authentication, upload pictures, follow,un-follow users, like posts, see posts of your following users. Users can also change their information, 
+authentication, upload pictures, follow (un-follow) users, like (un-like) posts, see posts of your following users. Users can also change their information, 
 passwords as well as delete their profile entirely. In addition, I use cloudinary service to host users pictures.
 The website is built from the inside out using MERN stack technology.
 
