@@ -12,7 +12,7 @@ import {
   MY_POST_FAIL,
   MY_POST_RESET,
   POST_UPDATE_LIKES,
-  POST_ADD_COMMENTS,
+  POST_UPDATE_COMMENTS,
   POST_DELETE,
   FOLLOWING_POST_LIST_REQUEST,
   FOLLOWING_POST_LIST_SUCCESS,
@@ -57,7 +57,7 @@ export const postListReducer = (state = { posts: [] }, action) => {
         ),
         loading: false,
       }
-    case POST_ADD_COMMENTS:
+    case POST_UPDATE_COMMENTS:
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -101,7 +101,7 @@ export const followingPostListReducer = (state = { posts: [] }, action) => {
         ),
         loading: false,
       }
-    case POST_ADD_COMMENTS:
+    case POST_UPDATE_COMMENTS:
       return {
         ...state,
         posts: state.posts.map((post) =>
@@ -145,7 +145,7 @@ export const postSingleReducer = (state = { posts: [] }, action) => {
         ),
         loading: false,
       }
-    case POST_ADD_COMMENTS:
+    case POST_UPDATE_COMMENTS:
       return {
         ...state,
         posts: state.posts.map((post) =>

@@ -10,6 +10,7 @@ import {
   likePost,
   unLikePost,
   commentPost,
+  commentDelete,
   deletePost,
 } from '../controllers/postControllers.js'
 import { postStorage } from '../config/cloudinary.js'
@@ -25,6 +26,7 @@ router.get('/myPosts', protect, getMyPosts)
 router.put('/:id/likePost', protect, likePost)
 router.put('/:id/unLikePost', protect, unLikePost)
 router.put('/:id/commentPost', protect, commentPost)
+router.put('/:postId/:commentId/commentDelete', protect, commentDelete)
 router.post('/:id/delete', protect, deletePost) // Delete post
 
 export default router

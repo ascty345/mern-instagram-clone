@@ -191,7 +191,7 @@ const commentPost = asyncHandler(async (req, res) => {
     throw new Error('Post not found')
   }
 
-  post.comments.unshift({ user: req.user.id, comment: req.body.comment })
+  post.comments.push({ user: req.user.id, comment: req.body.comment })
 
   await post.save()
 
@@ -200,6 +200,45 @@ const commentPost = asyncHandler(async (req, res) => {
     select: 'name profilePic _id',
   })
   res.json(commentedPost.comments)
+})
+
+// @desc   Delete a comment
+// @route  PUT /api/posts/:postId/:commentId/deleteComment
+// @access Private
+
+const commentDelete = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.postId)
+
+  if (!post) {
+    res.status(404)
+    throw new Error('Post not found')
+  }
+
+  // Check if the post has already been comment
+  if (
+    post.comments.filter(
+      (comment) =>
+        comment.user.toString() === req.user.id &&
+        comment._id.toString() === req.params.commentId
+    ).length === 0
+  ) {
+    res.status(400)
+    throw new Error('The comment is not existed')
+  }
+  // Get remove index
+  const removeIndex = post.comments
+    .map((comment) => comment._id.toString())
+    .indexOf(req.params.commentId)
+
+  post.comments.splice(removeIndex, 1)
+
+  await post.save()
+
+  const updatedPost = await Post.findById(req.params.postId).populate({
+    path: 'comments.user',
+    select: 'name profilePic _id',
+  })
+  res.json(updatedPost.comments)
 })
 
 // @desc   Delete a post
@@ -236,5 +275,6 @@ export {
   likePost,
   unLikePost,
   commentPost,
+  commentDelete,
   deletePost,
 }

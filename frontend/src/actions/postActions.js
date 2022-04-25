@@ -10,7 +10,7 @@ import {
   MY_POST_SUCCESS,
   MY_POST_FAIL,
   POST_UPDATE_LIKES,
-  POST_ADD_COMMENTS,
+  POST_UPDATE_COMMENTS,
   POST_DELETE,
   FOLLOWING_POST_LIST_REQUEST,
   FOLLOWING_POST_LIST_SUCCESS,
@@ -252,7 +252,7 @@ export const commentPost = (postId, comment) => async (dispatch, getState) => {
     )
 
     dispatch({
-      type: POST_ADD_COMMENTS,
+      type: POST_UPDATE_COMMENTS,
       payload: { postId, comments: data },
     })
   } catch (error) {
@@ -265,6 +265,41 @@ export const commentPost = (postId, comment) => async (dispatch, getState) => {
     })
   }
 }
+
+export const deleteComment =
+  (postId, commentId) => async (dispatch, getState) => {
+    try {
+      const {
+        userLogin: { userInfo },
+      } = getState()
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+
+      const { data } = await axios.put(
+        `/api/posts/${postId}/${commentId}/commentDelete`,
+        {},
+        config
+      )
+
+      dispatch({
+        type: POST_UPDATE_COMMENTS,
+        payload: { postId, comments: data },
+      })
+    } catch (error) {
+      dispatch({
+        type: POST_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    }
+  }
 
 export const deletePost = (postId, photoId) => async (dispatch, getState) => {
   try {

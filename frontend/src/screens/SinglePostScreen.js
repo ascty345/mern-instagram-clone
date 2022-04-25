@@ -20,6 +20,7 @@ import {
   likePost,
   unLikePost,
   commentPost,
+  deleteComment,
   deletePost,
 } from '../actions/postActions'
 
@@ -48,6 +49,10 @@ const SinglePostScreen = () => {
 
   const submitCommentHandler = (postId, comment) => {
     dispatch(commentPost(postId, comment))
+  }
+
+  const deleteCommentHandler = (postId, commentId) => {
+    dispatch(deleteComment(postId, commentId))
   }
 
   useEffect(() => {
@@ -189,23 +194,41 @@ const SinglePostScreen = () => {
                 <ListGroup className='mb-3 list-group-flush'>
                   {post.comments.map((comment) => (
                     <ListGroup.Item key={comment._id}>
-                      <Link
-                        to={`/profile/${comment.user._id}`}
-                        style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <Image
-                          className='rounded-circle pull-left me-1'
-                          style={{ maxWidth: '2rem' }}
-                          variant='top'
-                          src={comment.user.profilePic.replace(
-                            /upload\//g,
-                            'upload/c_fill,h_500,w_500/r_max/'
-                          )}
-                        />
-                        <span className='fs-9 fw-bold'>
-                          {comment.user.name}:{' '}
-                        </span>
-                        {comment.comment}
-                      </Link>
+                      <Row>
+                        <Col>
+                          <Link
+                            to={`/profile/${comment.user._id}`}
+                            style={{
+                              textDecoration: 'none',
+                              color: 'inherit',
+                            }}>
+                            <Image
+                              className='rounded-circle pull-left me-1'
+                              style={{ maxWidth: '2rem' }}
+                              variant='top'
+                              src={comment.user.profilePic.replace(
+                                /upload\//g,
+                                'upload/c_fill,h_500,w_500/r_max/'
+                              )}
+                            />
+                            <span className='fs-9 fw-bold'>
+                              {comment.user.name}:{' '}
+                            </span>
+                            {comment.comment}
+                          </Link>
+                        </Col>
+                        {comment.user._id === userInfo._id && (
+                          <Col className='text-end'>
+                            <i
+                              onClick={deleteCommentHandler.bind(
+                                null,
+                                post._id,
+                                comment._id
+                              )}
+                              className='fa-solid fa-eraser'></i>
+                          </Col>
+                        )}
+                      </Row>
                     </ListGroup.Item>
                   ))}
                 </ListGroup>
