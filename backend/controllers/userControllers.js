@@ -224,6 +224,33 @@ const unfollow = asyncHandler(async (req, res) => {
   res.json(user)
 })
 
+// @desc   Search users
+// @route  POST /api/users/searchUser
+// @access Private
+const searchUsers = asyncHandler(async (req, res) => {
+  const keyword = req.body.name
+    ? {
+        name: {
+          $regex: req.body.name,
+          $options: 'i',
+        },
+      }
+    : {}
+
+  if (Object.keys(keyword).length === 0) {
+    throw new Error('Please enter something')
+  }
+
+  const users = await User.find({ ...keyword }, [
+    '_id',
+    'name',
+    'email',
+    'profilePic',
+  ])
+
+  res.json(users)
+})
+
 export {
   registerUser,
   authUser,
@@ -231,4 +258,5 @@ export {
   getUserById,
   follow,
   unfollow,
+  searchUsers,
 }

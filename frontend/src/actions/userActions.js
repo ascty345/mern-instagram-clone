@@ -26,6 +26,10 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
+  USER_SEARCH_REQUEST,
+  USER_SEARCH_SUCCESS,
+  USER_SEARCH_FAIL,
+  USER_SEARCH_RESET,
 } from '../constants/userConstants'
 
 export const register = (formData) => async (dispatch) => {
@@ -104,6 +108,44 @@ export const userUpdateAction = (formData) => async (dispatch, getState) => {
   }
 }
 
+export const searchForUser = (name) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_SEARCH_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.post(
+      '/api/users/searchUsers',
+      { name },
+      config
+    )
+
+    dispatch({
+      type: USER_SEARCH_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: USER_SEARCH_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({
@@ -158,6 +200,7 @@ export const logout = () => (dispatch) => {
   dispatch({ type: FOLLOWING_POST_LIST_RESET })
   dispatch({ type: MY_POST_RESET })
   dispatch({ type: FOLLOW_RESET })
+  dispatch({ type: USER_SEARCH_RESET })
 }
 
 export const listOtherUserPosts = (userId) => async (dispatch, getState) => {

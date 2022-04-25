@@ -9,6 +9,7 @@ import {
   getUserById,
   follow,
   unfollow,
+  searchUsers,
 } from '../controllers/userControllers.js'
 import { profileStorage } from '../config/cloudinary.js'
 
@@ -21,5 +22,6 @@ router.post('/signin', authUser)
 router.get('/:id', protect, getUserById)
 router.put('/follow', protect, follow)
 router.put('/unfollow', protect, unfollow)
+router.post('/searchUsers', protect, searchUsers)
 
 export default router

@@ -3,10 +3,14 @@ import Popup from 'reactjs-popup'
 import 'reactjs-popup/dist/index.css'
 
 const Modal = (props) => {
-  const { trigger, children, position } = props
+  const { contentStyle, trigger, children, position } = props
 
   return (
-    <Popup trigger={trigger} position={position} modal>
+    <Popup
+      contentStyle={contentStyle}
+      trigger={trigger}
+      position={position}
+      modal>
       {children}
     </Popup>
   )

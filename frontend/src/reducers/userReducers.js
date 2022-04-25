@@ -21,6 +21,10 @@ import {
   USER_UPDATE_FAIL,
   USER_UPDATE_RESET,
   USER_REGISTER_RESET,
+  USER_SEARCH_REQUEST,
+  USER_SEARCH_SUCCESS,
+  USER_SEARCH_FAIL,
+  USER_SEARCH_RESET,
 } from '../constants/userConstants'
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -66,6 +70,24 @@ export const userLoginReducer = (state = { userInfo: null }, action) => {
       return { loading: false, error: action.payload }
     case USER_LOGOUT:
       return { userInfo: null }
+    default:
+      return state
+  }
+}
+
+export const userSearchReducer = (state = { users: [] }, action) => {
+  switch (action.type) {
+    case USER_SEARCH_REQUEST:
+      return { loading: true, users: [] }
+    case USER_SEARCH_SUCCESS:
+      return {
+        loading: false,
+        users: action.payload,
+      }
+    case USER_SEARCH_FAIL:
+      return { loading: false, error: action.payload, users: [] }
+    case USER_SEARCH_RESET:
+      return { users: [] }
     default:
       return state
   }
