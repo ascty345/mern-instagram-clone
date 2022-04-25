@@ -45,8 +45,6 @@ export const postListReducer = (state = { posts: [] }, action) => {
       return { loading: true, posts: [] }
     case POST_LIST_SUCCESS:
       return { loading: false, posts: action.payload }
-    case POST_LIST_FAIL:
-      return { loading: false, error: action.payload }
     case POST_UPDATE_LIKES:
       return {
         ...state,
@@ -76,6 +74,8 @@ export const postListReducer = (state = { posts: [] }, action) => {
         deleteConfirm: action.payload.message,
         loading: false,
       }
+    case POST_LIST_FAIL:
+      return { loading: false, error: action.payload }
     case POST_LIST_RESET:
       return { posts: [] }
     default:
@@ -89,8 +89,6 @@ export const followingPostListReducer = (state = { posts: [] }, action) => {
       return { loading: true, posts: [] }
     case FOLLOWING_POST_LIST_SUCCESS:
       return { loading: false, posts: action.payload }
-    case FOLLOWING_POST_LIST_FAIL:
-      return { loading: false, error: action.payload }
     case POST_UPDATE_LIKES:
       return {
         ...state,
@@ -120,6 +118,8 @@ export const followingPostListReducer = (state = { posts: [] }, action) => {
         deleteConfirm: action.payload.message,
         loading: false,
       }
+    case FOLLOWING_POST_LIST_FAIL:
+      return { loading: false, error: action.payload }
     case FOLLOWING_POST_LIST_RESET:
       return { posts: [] }
     default:
@@ -133,8 +133,6 @@ export const postSingleReducer = (state = { posts: [] }, action) => {
       return { loading: true, posts: [] }
     case SINGLE_POST_LIST_SUCCESS:
       return { loading: false, posts: [action.payload] }
-    case SINGLE_POST_LIST_FAIL:
-      return { loading: false, error: action.payload }
     case POST_UPDATE_LIKES:
       return {
         ...state,
@@ -164,8 +162,10 @@ export const postSingleReducer = (state = { posts: [] }, action) => {
         deleteConfirm: action.payload.message,
         loading: false,
       }
+    case SINGLE_POST_LIST_FAIL:
+      return { loading: false, error: action.payload }
     case SINGLE_POST_LIST_RESET:
-      return {}
+      return { posts: [] }
     default:
       return state
   }

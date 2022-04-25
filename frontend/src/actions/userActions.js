@@ -219,8 +219,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({
       type: FOLLOW_REQUEST_SUCESS,
       payload: {
-        followers: data.followers,
-        following: data.following,
+        updatedUser: { followers: data.followers, following: data.following },
       },
     })
 

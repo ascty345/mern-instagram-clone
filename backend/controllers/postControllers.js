@@ -114,10 +114,7 @@ const getFollowingPosts = asyncHandler(async (req, res) => {
 // @access Private
 
 const likePost = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.id).populate({
-    path: 'likes.user',
-    select: 'name profilePic email _id',
-  })
+  const post = await Post.findById(req.params.id)
 
   if (!post) {
     res.status(404)
@@ -126,13 +123,14 @@ const likePost = asyncHandler(async (req, res) => {
 
   // Check if the post has already been liked
   if (
-    post.likes.filter((like) => like.user.toString() === req.user.id).length > 0
+    post.likes.filter((like) => like.user._id.toString() === req.user.id)
+      .length > 0
   ) {
     res.status(400)
     throw new Error('You already liked the post')
   }
 
-  post.likes.unshift({ user: req.user })
+  post.likes.unshift({ user: req.user._id })
 
   await post.save()
 
